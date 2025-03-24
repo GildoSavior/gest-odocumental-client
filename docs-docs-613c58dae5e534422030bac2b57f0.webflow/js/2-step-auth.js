@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const authData = data.data; // Extrai os dados de AuthResponseDTO
 
                     // Armazena os dados no localStorage
-                    localStorage.setItem("authToken", authData.jwt);
+                    localStorage.setItem("jwtToken", authData.jwt);
                     localStorage.setItem("userEmail", authData.email);
                     localStorage.setItem("userRole", authData.role);
                     localStorage.setItem("userPermissions", JSON.stringify(authData.userPermissions));
@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }, 2000);
                 } else {
                     alert("Erro ao validar código: " + data.message);
+                    
                 }
             })
             .catch(error => {
