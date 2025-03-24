@@ -1,31 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("login-form").addEventListener("submit", function (event) {
-        event.preventDefault(); // Impede o envio padrão do formulário
+    document.querySelector(".entrar").addEventListener("click", function (event) {
+        event.preventDefault(); // Impede o redirecionamento padrão do link
 
         // Capturar valores do formulário
         const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const password = document.querySelector("input[type='password']").value;
 
-        // Selecionar elementos de mensagem
-        const successMessage = document.getElementById("success-message");
-        const errorMessage = document.getElementById("error-message");
-
-        // Função para exibir mensagem
-        function showMessage(element, message) {
-            element.innerText = message;
-            element.style.display = "block";
-            setTimeout(() => {
-                element.style.display = "none"; // Esconde após 5 segundos
-            }, 5000);
-        }
-
-        // Limpar mensagens anteriores
-        successMessage.style.display = "none";
-        errorMessage.style.display = "none";
-
-        // Validar campos
         if (!email || !password) {
-            showMessage(errorMessage, "Preencha o email e a senha!");
+            alert("Preencha o email e a senha!");
             return;
         }
 
@@ -46,19 +28,16 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             if (data.ok) {
-                showMessage(successMessage, "Código de confirmação enviado para seu email!");
-
-                // Redireciona após um pequeno atraso para permitir que a mensagem seja vista
-                setTimeout(() => {
-                    window.location.href = "2-step-auth.html";
-                }, 2000);
+                alert("Código de confirmação enviado para seu email!");
+                localStorage.setItem("userEmail", email);
+                window.location.href = "2-step-auth.html"; // Apenas redireciona se for sucesso
             } else {
-                showMessage(errorMessage, "Erro: " + data.message);
+                alert("Erro: " + data.message); // Exibe a mensagem de erro da API
             }
         })
         .catch(error => {
             console.error("Erro ao enviar requisição:", error);
-            showMessage(errorMessage, "Falha na conexão com o servidor.");
+            alert("Falha na conexão com o servidor.");
         });
     });
 });
