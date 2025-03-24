@@ -1,0 +1,4 @@
+The following files failed to download during site export. Please check them in the designer assets view (images) or dashboard (fonts).
+
+images/Captura-de-ecrã-2020-01-05-às-12.54.11.png
+images/jpeg-icon.png
