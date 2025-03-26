@@ -69,11 +69,18 @@
               </div>
             </div>
           </div>
-        </div><label for="email">Email Address</label><input class="text-field-3 w-input" maxlength="256" name="email"
-          data-name="Email" placeholder="" type="email" id="email" required=""><label for="email-3">Senha (se
-          aplicável)</label><input class="text-field-3 w-input" maxlength="256" name="email-2" data-name="Email 2"
-          placeholder="" type="password" id="email-2" required=""><input type="submit" data-wait="Please wait..."
-          class="submit-button-2 w-button" value="Enviar">
+        </div>
+        <label for="email">Email Address</label>
+        <input class="text-field-3 w-input" maxlength="256" name="email" data-name="Email" 
+               placeholder="Digite seu email" type="email" id="email" required>
+        
+        <label for="password">Senha (se aplicável)</label>
+        <input class="text-field-3 w-input" maxlength="256" name="password" data-name="password" 
+               placeholder="Digite sua senha (opcional)" type="password" id="password" 
+               aria-label="Senha opcional">
+        
+        <input type="submit" data-wait="Please wait..." class="submit-button-2 w-button" value="Enviar">
+        
       </form>
       <div class="success-message w-form-done">
         <div>Documento enviado com sucesso!</div>
