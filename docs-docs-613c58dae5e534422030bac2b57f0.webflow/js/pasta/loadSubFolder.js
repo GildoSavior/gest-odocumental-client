@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         folders.forEach((folder, index) => {
             let folderElement = document.createElement("a");
-            folderElement.href = `pastas/inside-sub-folder.html?id=${folder.id}`;
+            folderElement.href = `inside-sub-folder.html?id=${folder.id}`;
             folderElement.classList.add("pasta-link", "w-inline-block");
 
             folderElement.innerHTML = `
