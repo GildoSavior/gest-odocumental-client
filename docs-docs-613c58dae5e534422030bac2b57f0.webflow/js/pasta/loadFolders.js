@@ -19,22 +19,22 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             credentials: "include" // Inclui cookies de autenticação se necessário
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro ${response.status}: Falha ao carregar as pastas.`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.ok && data.data) {
-                renderFolders(data.data.content);
-            } else {
-                console.error("Erro ao carregar as pastas:", data.message);
-            }
-        })
-        .catch(error => {
-            console.error("Erro na requisição:", error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status}: Falha ao carregar as pastas.`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.ok && data.data) {
+                    renderFolders(data.data.content);
+                } else {
+                    console.error("Erro ao carregar as pastas:", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Erro na requisição:", error);
+            });
     }
 
     // Função para renderizar as pastas no HTML
@@ -53,6 +53,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="div-block-56"></div>
                 <h4 class="heading">${folder.name}</h4>
             `;
+
+            folderElement.addEventListener("click", function () {                
+                localStorage.setItem("selectedFolderId", folder.id);
+            });
 
             rowDiv.appendChild(folderElement);
 
