@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const yearSelect = document.getElementById("year"); // Primeiro select (anos)
-    const folderSelect = document.getElementById("folder"); // Segundo select (pastas)
-    const subFolderSelect = document.getElementById("subFolder"); // Terceiro select (subpastas)
-    const authToken = localStorage.getItem("jwtToken"); // Obtém o token do localStorage (ou de outra fonte segura)
+    const yearSelect = document.getElementById("year");
+    const folderSelect = document.getElementById("folder");
+    const subFolderSelect = document.getElementById("subFolder");
+    const authToken = localStorage.getItem("jwtToken");
 
     if (!yearSelect || !folderSelect || !subFolderSelect || !authToken) return;
 
@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
         yearSelect.appendChild(option);
     }
 
-    // Evento para carregar as pastas ao selecionar um ano
     yearSelect.addEventListener("change", async () => {
         const selectedYear = yearSelect.value;
         if (!selectedYear) return;
@@ -37,11 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const folders = res.data;
 
             folderSelect.innerHTML = `<option value="">Selecione uma pasta</option>`;
-            subFolderSelect.innerHTML = `<option value="">Selecione uma subpasta</option>`; // Resetar subpastas
+            subFolderSelect.innerHTML = `<option value="">Selecione uma subpasta</option>`;
 
             folders.forEach(folder => {
                 const option = document.createElement("option");
-                option.value = folder.id || folder.name; // Usa `id` se disponível, senão `name`
+                option.value = folder.id || folder.name;
                 option.textContent = folder.name;
                 folderSelect.appendChild(option);
             });
@@ -51,12 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Evento para carregar as subpastas ao selecionar uma pasta
     folderSelect.addEventListener("change", async () => {
         const selectedFolderId = folderSelect.value;
         
         if (!selectedFolderId) {
-            subFolderSelect.innerHTML = `<option value="">Selecione uma subpasta</option>`; // Resetar subpastas
+            subFolderSelect.innerHTML = `<option value="">Selecione uma subpasta</option>`;
             return;
         }
 
@@ -87,4 +85,53 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Erro ao buscar subpastas:", error);
         }
     });
+
+    // -------------------- Input de Arquivo --------------------
+
+    const input = document.getElementById('image');
+    const dropArea = document.getElementById('drop-area');
+    const uploadedFilesContainer = document.getElementById('uploaded-files');
+
+    if (!input || !dropArea || !uploadedFilesContainer) return;
+
+    input.addEventListener('change', (event) => {
+        handleFiles(event.target.files);
+    });
+    
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('highlight');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('highlight');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('highlight');
+        handleFiles(e.dataTransfer.files);
+    });
+
+    function handleFiles(files) {
+        uploadedFilesContainer.innerHTML = ''; // Limpa antes de adicionar novos arquivos
+        
+        Array.from(files).forEach(file => {
+            const fileDiv = document.createElement('div');
+            fileDiv.classList.add('uploaded-file-content');
+
+            fileDiv.innerHTML = `
+                <div class="uploaded-file-info">
+                    <span class="uploaded-file-name">${file.name}</span>
+                    <span class="uploaded-file-size">(${(file.size / 1024).toFixed(1)} KB)</span>
+                </div>
+                <a href="#" class="button gray w-button" onclick="removeFile(this)">Apagar</a>
+            `;
+            uploadedFilesContainer.appendChild(fileDiv);
+        });
+    }
+
+    window.removeFile = function(button) {
+        button.parentElement.remove();
+    };
 });

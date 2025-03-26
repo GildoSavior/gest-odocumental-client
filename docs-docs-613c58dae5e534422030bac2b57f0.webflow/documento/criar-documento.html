@@ -64,66 +64,59 @@
         <form id="wf-form-Criar-Anuncio" name="wf-form-Criar-Anuncio" data-name="Criar Anuncio" method="get"
           class="form round-corners" data-wf-page-id="67d2d5d866445187d1909793"
           data-wf-element-id="9b6e690f-e668-5edc-60d0-db217361c198">
-          <div class="form-left-side"><label for="name" class="form-field-label">Nome</label><input
-              class="form-text-field w-input" maxlength="256" name="nome-do-an-ncio" data-name="Nome Do An Ncio"
-              placeholder="" type="text" id="nome-do-an-ncio"><label for="email" class="form-field-label">Senha</label>
-            <div class="form-field-label-description">Caso o documento for confidencial crie uma senha</div><input
-              class="form-text-field w-input" maxlength="256" name="link-do-anuncio-2" data-name="Link Do Anuncio 2"
-              placeholder="" type="email" id="link-do-anuncio-2">
+          <div class="form-left-side">
+            <label for="name" class="form-field-label">Nome</label>
+            <input class="form-text-field w-input" maxlength="256" name="name" id="name"
+              placeholder="Digite o nome do documento" type="text">
+
+            <label for="password" class="form-field-label">Senha</label>
+            <div class="form-field-label-description">Caso o documento seja confidencial, crie uma senha</div>
+            <input class="form-text-field w-input" maxlength="256" name="password" id="password"
+              placeholder="Digite uma senha" type="password">
+
             <div class="div-block-60">
               <label for="year" class="form-field-label">Ano</label>
               <div class="form-field-label-description">Escolha o ano de criação deste documento</div>
-              <select id="year" name="year" data-name="year" class="form-select-field last-item w-select">
-                <option value="Another Choice"></option>
+              <select id="year" name="year" class="form-select-field last-item w-select">
+                <option value="">Selecione um ano</option>
               </select>
             </div>
+
             <div class="div-block-60">
               <label for="folder" class="form-field-label">Pasta</label>
               <div class="form-field-label-description">Escolha a pasta para este documento</div>
-              <select id="folder" name="folder" data-name="folder" class="form-select-field last-item w-select">
-                <option value=""></option>
+              <select id="folder" name="folder" class="form-select-field last-item w-select">
+                <option value="">Selecione uma pasta</option>
               </select>
             </div>
+
             <div class="div-block-60">
               <label for="subFolder" class="form-field-label">Sub-pasta</label>
-              <select id="subFolder" name="subFolder" data-name="subFolder"
-                class="form-select-field last-item w-select">
-                <option value=""></option>
-                <option value="todos">Todos</option>
-                <option value="Another Choice">Recursos Humanos</option>
-                <option value="Another Choice">Finanças</option>
-                <option value="Another Choice">Logistica</option>
-                <option value="Another Choice">Operações Mineiras</option>
+              <div class="form-field-label-description">Escolha uma subpasta, se necessário</div>
+              <select id="subFolder" name="subFolder" class="form-select-field last-item w-select">
+                <option value="">Selecione uma subpasta</option>
               </select>
             </div>
           </div>
+
           <div class="form-right-side w-clearfix">
-            <div class="conteudo_imagem"><label for="email" class="form-field-label">Adicionar Ficheiros</label>
+            <div class="conteudo_imagem">
+              <label for="image" class="form-field-label">Adicionar Ficheiros</label>
               <div class="form-field-label-description">Arraste os ficheiros que pretende publicar</div>
-              <div class="photo-upload-input-wrapper">
-                <div class="photo-upload-input-field">
-                  <div class="photo-upload-icon">4</div>
-                  <div class="photo-upload-text">Uplaod</div>
-                </div>
-                <div class="uploaded-photo-wrapper" data-ix="uploaded-photo">
-                  <div class="uploaded-photo-content">
-                    <div class="uploaded-photo-div">
-                      <div class="photo-contain"><img
-                          src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" alt=""></div>
-                    </div>
-                    <div class="uploaded-photo-info">
-                      <div class="div-block-72">
-                        <div class="uploaded-image-name">imagem-teste.png</div>
-                        <div class="uploaded-image-resolution">200 x 180</div>
-                      </div>
-                    </div>
-                  </div>
-                  <a href="#" class="button gray w-button">Substituir</a>
-                  <a href="#" class="button gray w-button">Apagar</a>
+              
+              <div class="photo-upload-input-wrapper" id="drop-area">
+                <input type="file" id="image" class="photo-upload-input" accept="image/*" multiple hidden>
+                
+                <label for="image" class="photo-upload-input-field">
+                  <div class="photo-upload-icon">📂</div>
+                  <div class="photo-upload-text">Upload</div>
+                </label>
+                
+                <div class="uploaded-photo-wrapper" id="uploaded-files">
+                  <!-- Aqui serão exibidos os arquivos carregados -->
                 </div>
               </div>
-            </div>
-            <a href="#" class="button blue float-right _100 _900 w-button" data-ix="modal-1"><span
+            <a href="#" class="button blue float-right _100 _900 w-button" ><span
                 class="icon-2">4</span>Criar Documento</a>
           </div>
         </form>
