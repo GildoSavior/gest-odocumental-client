@@ -30,7 +30,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const documents = res.data
              
 
-        if (!documents || documents.length === 0) {            
+        if (!documents || documents.length === 0) {
+            
             emptyContentDiv.style.display = "block";
             tableWrapper.style.display = "none";
             return;

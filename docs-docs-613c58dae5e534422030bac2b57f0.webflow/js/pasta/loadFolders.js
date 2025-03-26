@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Recuperar o token do localStorage
     const token = localStorage.getItem("jwtToken");
 
+  
+
     // Função para buscar as pastas da API
     function fetchFolders() {
         if (!token) {
@@ -54,8 +56,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <h4 class="heading">${folder.name}</h4>
             `;
 
-            folderElement.addEventListener("click", function () {                
+            folderElement.addEventListener("click", function () {
                 localStorage.setItem("selectedFolderId", folder.id);
+                localStorage.setItem("selectedFolderName", folder.name);
+                localStorage.setItem("selectedFolderYear", folder.year);
+
             });
 
             rowDiv.appendChild(folderElement);

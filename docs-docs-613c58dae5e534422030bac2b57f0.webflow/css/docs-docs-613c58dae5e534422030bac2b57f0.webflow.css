@@ -2546,6 +2546,13 @@ body {
   padding: 10px 10px 10px 50px;
 }
 
+.sem-conteudo-folder {
+  background-color: #cecece;
+  border-radius: 4px;
+  margin-bottom: 25px;
+  padding: 10px 10px 10px 50px;
+}
+
 .text-block-122 {
   font-style: italic;
 }
@@ -3458,6 +3465,9 @@ html.w-mod-js [data-ix="modal-1"] {
   }
 
   .sem-conteudo {
+    padding-left: 20px;
+  }
+  .sem-conteudo-folder {
     padding-left: 20px;
   }
 

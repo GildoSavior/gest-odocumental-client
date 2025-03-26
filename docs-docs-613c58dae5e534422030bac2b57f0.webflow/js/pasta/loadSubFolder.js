@@ -6,6 +6,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("jwtToken");
     const selectedFolderId = localStorage.getItem("selectedFolderId");
 
+    const folderName = localStorage.getItem("selectedFolderName") || "Pasta desconhecida";
+    const folderYear = localStorage.getItem("selectedFolderYear") || "Ano desconhecido";
+
+    const breadcrumb = document.querySelector(".text-block-113");
+    if (breadcrumb) {
+        breadcrumb.textContent = `Início > ${folderYear} > ${folderName}`;
+    }
+
+
     function fetchFolders() {
         if (!token) {
             console.error("Token de autenticação não encontrado!");
@@ -67,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             folderElement.addEventListener("click", function () {
                 localStorage.setItem("selectedFolderId", folder.id);
+                localStorage.setItem("selectedSubFolderName", folder.name);
             });
 
             rowDiv.appendChild(folderElement);
