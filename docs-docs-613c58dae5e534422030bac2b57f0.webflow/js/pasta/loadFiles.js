@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             <div class="text-block-115">3</div>
                             <div class="text-block-116">Ver</div>
                         </a>
-                        <a href="#" class="action-link w-inline-block">
+                        <a href="../documento/editar-documento.html?file=${doc.id}" class="action-link w-inline-block">
                             <div class="text-block-115 _900">k</div>
                             <div class="text-block-116">Editar</div>
                         </a>
