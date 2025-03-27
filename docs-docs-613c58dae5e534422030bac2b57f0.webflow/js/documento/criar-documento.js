@@ -172,6 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!uploadResponse.ok) throw new Error("Erro ao fazer upload");
 
                 alert("Documento e arquivo enviados com sucesso!");
+
+                setTimeout(() => {
+                    window.location.href = "../main-dashboard.html";
+                }, 1000);
             } else {
                 alert("Documento criado, mas nenhum arquivo foi enviado.");
             }
