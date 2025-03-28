@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return urlParams.get(param);
     }
 
-    const fileId = getQueryParam("file");
+    let fileId = getQueryParam("file");
 
     function populateYears(selectedYear = null) {
         const currentYear = new Date().getFullYear();
@@ -190,7 +190,42 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!response.ok) throw new Error("Erro ao enviar dados");
 
             alert("Arquivo salvo com sucesso!");
-           
+
+            const responseData = await response.json();
+            const fileName = responseData.data.name;
+            const folderName = subFolderSelect.value
+                ? subFolderSelect.selectedOptions[0].textContent
+                : folderSelect.selectedOptions[0].textContent;
+
+            if (!fileId) {
+                fileId = parseInt(responseData.data.id);
+            }
+
+            const fileInput = document.getElementById("image");
+            if (fileInput.files.length > 0) {
+                const formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+                formData.append("fileId", fileId);
+                formData.append("fileName", fileName);
+                formData.append("folderName", folderName);
+
+                const uploadResponse = await fetch("http://localhost:8080/api/files/upload", {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${authToken}` },
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) throw new Error("Erro ao fazer upload");
+
+                alert("Documento e arquivo enviados com sucesso!");
+            } else {
+                alert("Documento criado, mas nenhum arquivo foi enviado.");
+            }
+
+            setTimeout(() => {
+                window.location.href = "../main-dashboard.html";
+            }, 1000);
+
         } catch (error) {
             console.error("Erro ao enviar:", error);
             alert("Falha ao salvar o arquivo.");
