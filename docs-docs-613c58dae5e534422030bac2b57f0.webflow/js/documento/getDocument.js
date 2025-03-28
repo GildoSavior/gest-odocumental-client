@@ -1,73 +1,199 @@
-document.addEventListener("DOMContentLoaded", async function () {
-    // Função para obter parâmetros da URL
+document.addEventListener("DOMContentLoaded", async () => {
+    const yearSelect = document.getElementById("year");
+    const folderSelect = document.getElementById("folder");
+    const subFolderSelect = document.getElementById("subFolder");
+    const nameInput = document.getElementById("name");
+    const passwordInput = document.getElementById("password");
+    const authToken = localStorage.getItem("jwtToken");
+
+    if (!yearSelect || !folderSelect || !subFolderSelect || !authToken) return;
+
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     }
 
-    // Obtém o ID do arquivo da URL
     const fileId = getQueryParam("file");
-    if (!fileId) {
-        console.error("Nenhum fileId encontrado na URL.");
-        return;
+
+    function populateYears(selectedYear = null) {
+        const currentYear = new Date().getFullYear();
+        const startYear = 2000;
+        yearSelect.innerHTML = `<option value="">Selecione um ano</option>`;
+        for (let year = currentYear; year >= startYear; year--) {
+            yearSelect.innerHTML += `<option value="${year}" ${year == selectedYear ? "selected" : ""}>${year}</option>`;
+        }
     }
 
+    async function fetchFolders(year, selectedFolderId = null, selectedSubFolderId = null) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/folders/year/${year}`, {
+                headers: { "Authorization": `Bearer ${authToken}` }
+            });
 
-    const token = localStorage.getItem("jwtToken");    
+            if (!response.ok) throw new Error("Erro ao carregar pastas");
 
-    // URL da API
-    const apiUrl = `http://localhost:8080/api/files/${fileId}`;
+            const res = await response.json();
+            const folders = res.data;
 
-    try {
-        const response = await fetch(apiUrl, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
+            folderSelect.innerHTML = `<option value="">Selecione uma pasta</option>`;
+            subFolderSelect.innerHTML = `<option value="">Selecione uma subpasta</option>`;
+
+            folders.forEach(folder => {
+                folderSelect.innerHTML += `<option value="${folder.id}" ${folder.id == selectedFolderId ? "selected" : ""}>${folder.name}</option>`;
+            });
+
+            if (selectedFolderId) {
+                await fetchSubFolders(selectedFolderId, selectedSubFolderId);
             }
-        });
-
-        if (!response.ok) {
-            throw new Error("Erro ao buscar os dados do documento.");
+        } catch (error) {
+            console.error("Erro ao buscar pastas:", error);
+            alert("Erro ao carregar as pastas.");
         }
-
-        const result = await response.json();
-        if (!result.ok) {
-            throw new Error(result.message || "Erro na resposta da API.");
-        }
-
-        const data = result.data;        
-
-        // Preenchendo os campos do formulário
-        document.getElementById("name").value = data.name || "";
-        document.getElementById("password").value = data.password || "";
-        document.getElementById("year").value = data.year || "";
-
-        // Tratamento das pastas e subpastas
-        const folderSelect = document.getElementById("folder");
-        const subFolderSelect = document.getElementById("subFolder");
-
-          // Preencher o select do ano e definir o valor retornado pela API
-          const yearSelect = document.getElementById("year");
-          yearSelect.innerHTML = `<option value="${data.year}" selected>${data.year}</option>`;
-
-        if (data.parentFolderId === null) {
-            folderSelect.innerHTML = `<option value="${data.folderId}" selected>${data.folderName}</option>`;
-            subFolderSelect.innerHTML = `<option value="">Nenhuma subpasta</option>`;
-        } else {
-            folderSelect.innerHTML = `<option value="${data.parentFolderId}" selected>${data.parentFolderName}</option>`;
-            subFolderSelect.innerHTML = `<option value="${data.folderId}" selected>${data.folderName}</option>`;
-        }
-
-        // Exibir a imagem ou arquivo carregado (se necessário)
-        const uploadedFilesDiv = document.getElementById("uploaded-files");
-        uploadedFilesDiv.innerHTML = `
-            <div class="uploaded-file">
-                <a href="${data.filePath}" target="_blank">📄 ${data.name}</a>
-            </div>
-        `;
-
-    } catch (error) {
-        console.error("Erro ao carregar os dados:", error.message);
     }
+
+    async function fetchSubFolders(folderId, selectedSubFolderId = null) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/folders/${folderId}`, {
+                headers: { "Authorization": `Bearer ${authToken}` }
+            });
+
+            if (!response.ok) throw new Error("Erro ao carregar subpastas");
+
+            const res = await response.json();
+            const subFolders = res.data.content;
+
+            subFolderSelect.innerHTML = `<option value="">Selecione uma subpasta</option>`;
+
+            subFolders.forEach(subFolder => {
+                subFolderSelect.innerHTML += `<option value="${subFolder.id}" ${subFolder.id == selectedSubFolderId ? "selected" : ""}>${subFolder.name}</option>`;
+            });
+        } catch (error) {
+            console.error("Erro ao buscar subpastas:", error);
+            alert("Erro ao carregar subpastas.");
+        }
+    }
+
+    if (fileId) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/files/${fileId}`, {
+                headers: { "Authorization": `Bearer ${authToken}` }
+            });
+
+            if (!response.ok) throw new Error("Erro ao buscar o arquivo");
+
+            const res = await response.json();
+            const fileData = res.data;
+
+            nameInput.value = fileData.name;
+            passwordInput.value = fileData.password;
+
+            populateYears(fileData.year);
+            await fetchFolders(fileData.year, fileData.folderParentId, fileData.folderId);
+        } catch (error) {
+            console.error("Erro ao carregar dados do arquivo:", error);
+            alert("Erro ao carregar dados do arquivo.");
+        }
+    } else {
+        populateYears();
+    }
+
+    // Atualiza pastas quando o ano muda
+    yearSelect.addEventListener("change", async () => {
+        const year = yearSelect.value;
+        if (year) await fetchFolders(year);
+    });
+
+    // Atualiza subpastas quando a pasta muda
+    folderSelect.addEventListener("change", async () => {
+        const folderId = folderSelect.value;
+        if (folderId) await fetchSubFolders(folderId);
+    });
+
+    // -------------------- Upload de Arquivos --------------------
+    const input = document.getElementById("image");
+    const dropArea = document.getElementById("drop-area");
+    const uploadedFilesContainer = document.getElementById("uploaded-files");
+
+    if (input && dropArea && uploadedFilesContainer) {
+        input.addEventListener("change", (event) => handleFiles(event.target.files));
+        dropArea.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropArea.classList.add("highlight");
+        });
+        dropArea.addEventListener("dragleave", () => dropArea.classList.remove("highlight"));
+        dropArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropArea.classList.remove("highlight");
+            handleFiles(e.dataTransfer.files);
+        });
+    }
+
+    function handleFiles(files) {
+        uploadedFilesContainer.innerHTML = "";
+        Array.from(files).forEach(file => {
+            const fileDiv = document.createElement("div");
+            fileDiv.classList.add("uploaded-file-content");
+            fileDiv.innerHTML = `
+                <div class="uploaded-file-info">
+                    <span class="uploaded-file-name">${file.name}</span>
+                    <span class="uploaded-file-size">(${(file.size / 1024).toFixed(1)} KB)</span>
+                </div>
+                <a href="#" class="button gray w-button" onclick="removeFile(this)">Apagar</a>
+            `;
+            uploadedFilesContainer.appendChild(fileDiv);
+        });
+    }
+
+    window.removeFile = function (button) {
+        button.parentElement.remove();
+    };
+
+    // -------------------- Envio do Formulário --------------------
+    const form = document.getElementById("wf-form-Criar-Anuncio");
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const name = nameInput.value;
+        const year = yearSelect.value;
+        const password = passwordInput.value;
+        const folderId = subFolderSelect.value || folderSelect.value;
+
+        if (!name || !year || !password || !folderId) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        const payload = {
+            name,
+            year: parseInt(year),
+            folderId: parseInt(folderId),
+            password
+        };
+
+        const url = fileId
+            ? `http://localhost:8080/api/files/update/${fileId}`
+            : "http://localhost:8080/api/files";
+
+        const method = fileId ? "PUT" : "POST";
+
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${authToken}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error("Erro ao enviar dados");
+
+            alert("Arquivo salvo com sucesso!");
+           
+        } catch (error) {
+            console.error("Erro ao enviar:", error);
+            alert("Falha ao salvar o arquivo.");
+        }
+    });
 });
