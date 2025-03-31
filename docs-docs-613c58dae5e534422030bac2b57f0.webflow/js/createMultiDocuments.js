@@ -76,5 +76,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 
+    const form = document.getElementById("wf-form-Criar-Anuncio");        
+    const fileInput = document.getElementById("image");
+    
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evita o reload da página
+
+        const year = yearSelect.value;
+        const folderId = subFolderSelect.value || folderSelect.value;
+        const files = fileInput.files;
+
+        if (!year || !folderId || files.length === 0) {
+            alert("Por favor, selecione uma pasta, um ano e adicione arquivos.");
+            return;
+        }
+
+        const formData = new FormData();
+        for (let file of files) {
+            formData.append("files", file);
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/files/${folderId}/${year}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${authToken}`,
+                },
+                body: formData,
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Arquivos enviados com sucesso!");
+                
+                fileInput.value = ""; // Limpa o input
+
+                   setTimeout(() => {
+        window.location.href = "../main-dashboard.html";
+    }, 1000);
+            } else {
+
+                throw new Error(result.message || "Erro ao enviar arquivos.");
+            }
+        } catch (error) {
+            console.error("Erro ao enviar os arquivos:", error);
+            alert("Erro ao enviar os arquivos. Verifique a conexão com o servidor.");
+        }
+    });
+
     populateYears();
+
+    
+ 
 })
