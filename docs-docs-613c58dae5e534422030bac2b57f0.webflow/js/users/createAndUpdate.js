@@ -1,15 +1,22 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const apiBaseUrl = "http://localhost:8080/api/users";
     const urlParams = new URLSearchParams(window.location.search);
-    const userEmail = urlParams.get("userEmail");
+    const userId = urlParams.get("id");
+    const token = localStorage.getItem("jwtToken");
 
     // Referências aos modais
     const modalSucesso = document.querySelector(".modal-sucesso");
     const modalErro = document.querySelector(".modal-erro");
 
-    if (userEmail) {
+    if (userId) {
         try {
-            const response = await fetch(`${apiBaseUrl}/${userEmail}`);
+            const response = await fetch(`${apiBaseUrl}/id/${userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` // Passando o token no cabeçalho
+                }
+            });
             if (response.ok) {
                 const result = await response.json();
                 const userData = result.data; // Pegando os dados corretos
@@ -55,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         };
 
-        const token = localStorage.getItem("jwtToken");
+   
         const headers = {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -63,8 +70,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         try {
             let response;
-            if (userEmail) {
-                response = await fetch(`${apiBaseUrl}/${userEmail}`, {
+            if (userId) {
+                response = await fetch(`${apiBaseUrl}/${user.email}`, {
                     method: "PUT",
                     headers,
                     body: JSON.stringify(user)
@@ -80,8 +87,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const result = await response.json(); // Pegando o JSON da resposta
 
             if (response.ok && result.ok) {
-                console.log("Usuário salvo:", result.data);
-                modalSucesso.style.display = "block"; // Exibir modal de sucesso
+               // Exibir modal de sucesso
 
                 // Upload da imagem, se existir
                 const fileInput = document.getElementById("image");
