@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     "Authorization": `Bearer ${token}` // Passando o token no cabeçalho
                 }
             });
+
             if (response.ok) {
                 const result = await response.json();
                 const userData = result.data; // Pegando os dados corretos
@@ -62,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         };
 
-   
+
         const headers = {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -87,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const result = await response.json(); // Pegando o JSON da resposta
 
             if (response.ok && result.ok) {
-               // Exibir modal de sucesso
+                // Exibir modal de sucesso
 
                 // Upload da imagem, se existir
                 const fileInput = document.getElementById("image");
