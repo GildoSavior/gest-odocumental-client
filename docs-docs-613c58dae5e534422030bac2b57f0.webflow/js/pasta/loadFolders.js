@@ -50,9 +50,11 @@ document.addEventListener("DOMContentLoaded", function () {
         rowDiv.classList.add("w-clearfix");
 
         foldersCopy1.forEach((folder, index) => {
+
             console.log("Dentro do forEach:", JSON.stringify(folder));
             let folderElement = document.createElement("a");
-            folderElement.href = `pastas/inside-folder.html?id=${folder.id}`;
+            // folderElement.href = `pastas/inside-folder.html?id=${folder.id}`;
+            // // folderElement.href = `../../main-dashboard.html`;
             folderElement.classList.add("pasta-link", "w-inline-block");
 
 
@@ -61,7 +63,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 <h4 class="heading">${folder.name}</h4>
             `;
 
-            folderElement.addEventListener("click", function () {
+            folderElement.addEventListener("click", function (event) {
+
+                const passwordWrapper = document.querySelector(".password-wrapper");
+                if (passwordWrapper) {
+                    passwordWrapper.style.display = "block";  // Torna o passwordWrapper visível
+                }
+
+
+                event.preventDefault();
                 localStorage.setItem("selectedFolderId", folder.id);
                 localStorage.setItem("selectedFolderName", folder.name);
                 localStorage.setItem("selectedFolderYear", folder.year);

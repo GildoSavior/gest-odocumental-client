@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const passwordWrapper = document.querySelector(".password-wrapper");
-    passwordWrapper.style.display = "block";
+    
 
     if (passwordWrapper) {
        
