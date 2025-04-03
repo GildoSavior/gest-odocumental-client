@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         breadcrumb.textContent = `Início > ${folderYear} > ${folderName}`;
     }
 
-
     function fetchFolders() {
         if (!token) {
             console.error("Token de autenticação não encontrado!");

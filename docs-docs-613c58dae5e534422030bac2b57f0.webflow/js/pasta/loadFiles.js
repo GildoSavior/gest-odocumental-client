@@ -205,6 +205,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         
                         if (response.ok) {
                             alert("Documento enviado com sucesso!", response.message);
+                            shareDiv.style.display = "none"; 
                         } else {
                             alert("Erro ao enviar o documento. Tente novamente!");
                         }

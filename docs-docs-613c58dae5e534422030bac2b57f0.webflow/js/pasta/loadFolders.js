@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Recuperar o token do localStorage
     const token = localStorage.getItem("jwtToken");
 
-  
+
 
     // Função para buscar as pastas da API
     function fetchFolders() {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(data => {
                 if (data.ok && data.data) {
-                    renderFolders(data.data.content);
+                    renderFolders(JSON.parse(JSON.stringify(data.data.content)));
                 } else {
                     console.error("Erro ao carregar as pastas:", data.message);
                 }
@@ -41,15 +41,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Função para renderizar as pastas no HTML
     function renderFolders(folders) {
+
+        const foldersCopy1 = folders.map(folder => ({ ...folder }));
+
         container.innerHTML = ""; // Limpa o container antes de adicionar novos itens
 
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("w-clearfix");
 
-        folders.forEach((folder, index) => {
+        foldersCopy1.forEach((folder, index) => {
+            console.log("Dentro do forEach:", JSON.stringify(folder));
             let folderElement = document.createElement("a");
             folderElement.href = `pastas/inside-folder.html?id=${folder.id}`;
             folderElement.classList.add("pasta-link", "w-inline-block");
+
 
             folderElement.innerHTML = `
                 <div class="div-block-56"></div>
@@ -60,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem("selectedFolderId", folder.id);
                 localStorage.setItem("selectedFolderName", folder.name);
                 localStorage.setItem("selectedFolderYear", folder.year);
+                localStorage.setItem("selectedFolderPassword", folder.password);
 
             });
 
@@ -72,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 rowDiv.classList.add("w-clearfix");
             }
         });
+
 
         // Adiciona a última linha se não estiver vazia
         if (rowDiv.children.length > 0) {
