@@ -64,6 +64,17 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
 
             folderElement.addEventListener("click", function (event) {
+                    event.preventDefault();
+                localStorage.setItem("selectedFolderId", folder.id);
+                localStorage.setItem("selectedFolderName", folder.name);
+                localStorage.setItem("selectedFolderYear", folder.year);
+                localStorage.setItem("selectedFolderPassword", folder.password);
+
+
+                if (!folder.password || folder.password.trim() === "") {
+                    window.location.href = `pastas/inside-folder.html?id=${folder.id}`;
+                    return;
+                }
 
                 const passwordWrapper = document.querySelector(".password-wrapper");
                 if (passwordWrapper) {
@@ -71,11 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
-                event.preventDefault();
-                localStorage.setItem("selectedFolderId", folder.id);
-                localStorage.setItem("selectedFolderName", folder.name);
-                localStorage.setItem("selectedFolderYear", folder.year);
-                localStorage.setItem("selectedFolderPassword", folder.password);
+               
 
             });
 

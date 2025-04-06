@@ -26,9 +26,11 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Erro: Nenhum folder selecionado.");
       return;
     }
+    const urlAtual = window.location.href;
+    var isMainFolder = urlAtual.includes("main-dashboard.html")
 
     const passwordInput = document.getElementById("password");
-    const password = passwordInput.value.trim();
+    const password = passwordInput.value;
     if (!password) {
       alert("Por favor, digite a senha.");
       return;
@@ -40,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // URL da API
     const apiUrl = `http://localhost:8080/api/folders/${folderId}/password/${password}`;
 
     try {
@@ -61,13 +62,14 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".w-form-done").style.display = "block";
         document.querySelector(".w-form-done div").textContent = result.message;
         setTimeout(() => {
-          window.location.href = `pastas/inside-folder.html?id=${folderId}`;
+          window.location.href = isMainFolder ? `pastas/inside-folder.html?id=${folderId}` :
+            `inside-sub-folder.html?id=${folderId}`;
         }, 2000);
       } else {
         document.querySelector(".w-form-fail").style.display = "block";
         document.querySelector(".w-form-fail div").textContent = result.message;
         setTimeout(() => {
-          window.location.href = "main-dashboard.html";
+          window.location.href = isMainFolder ? "main-dashboard.html" : "../main-dashboard.html";
         }, 2000);
       }
 
@@ -77,10 +79,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   })
-
-
-
-
-
-
 });

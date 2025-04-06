@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         folders.forEach((folder, index) => {
             let folderElement = document.createElement("a");
-            folderElement.href = `inside-sub-folder.html?id=${folder.id}`;
+            // folderElement.href = `inside-sub-folder.html?id=${folder.id}`;
             folderElement.classList.add("pasta-link", "w-inline-block");
 
             folderElement.innerHTML = `
@@ -74,8 +74,24 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
 
             folderElement.addEventListener("click", function () {
+
+                localStorage.setItem("selectedFolderYear", folder.year);
+                localStorage.setItem("selectedFolderPassword", folder.password);
                 localStorage.setItem("selectedFolderId", folder.id);
                 localStorage.setItem("selectedSubFolderName", folder.name);
+
+                // Verifica se o usuário está tentando acessar uma subpasta sem senha
+                if (!folder.password || folder.password.trim() === "") {
+                    window.location.href = `inside-sub-folder.html?id=${folder.id}`;
+                    return;
+                }
+
+                const passwordWrapper = document.querySelector(".password-wrapper");
+                if (passwordWrapper) {
+                    passwordWrapper.style.display = "block";  // Torna o passwordWrapper visível
+                }
+
+
             });
 
             rowDiv.appendChild(folderElement);

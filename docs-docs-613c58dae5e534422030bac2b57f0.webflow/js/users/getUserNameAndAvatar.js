@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const profileImage = document.querySelector(".profile-2"); 
 
     const token = localStorage.getItem("jwtToken"); 
+    const userEmail = localStorage.getItem("userEmail")
 
     if (!token) {
         console.error("Token de autenticação não encontrado!");
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/users/gildosalva.pe@gmail.com", {
+        const response = await fetch(`http://localhost:8080/api/users/email/${userEmail}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
