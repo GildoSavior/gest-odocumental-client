@@ -129,22 +129,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         });
 
-        // document.querySelectorAll(".share-btn").forEach(btn => {
-        //     btn.addEventListener("click", (event) => {
-        //         event.preventDefault();
-
-        //         const fileName = event.currentTarget.getAttribute("data-file-name");
-        //         const fileDate = event.currentTarget.getAttribute("data-file-date");
-
-        //         const docName = document.querySelector(".doc-name-copy .text-block-114-copy")
-        //         docName.textContent = fileName + " (" + fileDate + ")";
-
-        //         shareDiv.style.display = "block"; // Exibe a div de compartilhamento
-        //     });
-        // });
-
-
-
         document.querySelectorAll(".share-btn").forEach(btn => {
             btn.addEventListener("click", (event) => {
                 event.preventDefault();
