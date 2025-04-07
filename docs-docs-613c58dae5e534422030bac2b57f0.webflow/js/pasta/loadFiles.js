@@ -56,7 +56,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </div>
                 </div>
                 <div class="ations-wrapper">
-                    <a href="${doc.filePath}" class="action-link w-inline-block" target="_blank">
+                    <a href="" class="action-link w-inline-block ver-btn" target="_blank" 
+                        data-file-path="${doc.filePath}" 
+                        data-file-id="${doc.id}" 
+                        data-file-date="${new Date(doc.createdAt).toLocaleDateString()}"
+                        data-file-password="${doc.password ? doc.password : ''}">
                         <div class="text-block-115">3</div>
                         <div class="text-block-116">Ver</div>
                     </a>
@@ -82,6 +86,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         tableWrapper.appendChild(docFragment);
+
+        document.querySelectorAll(".ver-btn").forEach(btn => {
+            btn.addEventListener("click", async (event) => {
+                event.preventDefault();
+                
+                const filePath = event.currentTarget.getAttribute("data-file-path");
+                const fileId = event.currentTarget.getAttribute("data-file-id");
+
+                localStorage.setItem("selectedFileId", fileId);
+                localStorage.setItem("selectedFilePath", filePath);
+                
+                const password = event.currentTarget.getAttribute("data-file-password") || "";
+                if (!password || password.trim() === "") {                    
+                    window.open(filePath, "_blank"); // Abre o arquivo diretamente
+                    return;
+                }          
+
+                const passwordWrapper = document.querySelector(".password-wrapper");
+                if (passwordWrapper) {
+                    passwordWrapper.style.display = "block";
+                }
+            });
+        });
 
         document.querySelectorAll(".log-btn").forEach(btn => {
             btn.addEventListener("click", async (event) => {
@@ -132,30 +159,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelectorAll(".share-btn").forEach(btn => {
             btn.addEventListener("click", (event) => {
                 event.preventDefault();
-        
+
                 // Obtenha os dados do arquivo
                 const filePath = event.currentTarget.getAttribute("data-file-path");
                 const fileName = event.currentTarget.getAttribute("data-file-name");
                 const fileDate = event.currentTarget.getAttribute("data-file-date");
-        
+
                 // Exibe os detalhes do documento na UI
                 const docName = document.querySelector(".doc-name-copy .text-block-114-copy")
                 docName.textContent = `${fileName} (${fileDate})`;
-        
+
                 // Exibe a div de compartilhamento
-                shareDiv.style.display = "block"; 
-        
+                shareDiv.style.display = "block";
+
                 // Quando o formulário for enviado
                 const shareForm = document.getElementById("share-document-form");
                 shareForm.addEventListener("submit", async (submitEvent) => {
                     submitEvent.preventDefault();
-        
+
                     const email = document.getElementById("email").value;
                     const password = document.getElementById("password").value;
-        
+
                     // Aqui, você precisará buscar o arquivo no servidor, dado o `filePath`.
                     // Supondo que você consiga obter o arquivo no backend e usá-lo como um Blob:
-        
+
                     const file = await fetch(filePath)
                         .then(response => {
                             if (!response.ok) {
@@ -168,15 +195,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                             alert("Erro ao obter o arquivo. Tente novamente.");
                             return null;
                         });
-        
+
                     if (!file) return; // Se não conseguimos o arquivo, aborta
-        
+
                     // Cria o FormData para enviar os dados
                     const formData = new FormData();
                     formData.append("file", file); // Envia o arquivo
                     formData.append("email", email); // Envia o email
                     formData.append("password", password); // Envia a senha
-        
+
                     try {
                         // Envia os dados para o controller de envio de email
                         const response = await fetch("http://localhost:8080/api/mails/sendDocument", {
@@ -186,10 +213,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 "Authorization": `Bearer ${token}`,
                             },
                         });
-        
+
                         if (response.ok) {
                             alert("Documento enviado com sucesso!", response.message);
-                            shareDiv.style.display = "none"; 
+                            shareDiv.style.display = "none";
                         } else {
                             alert("Erro ao enviar o documento. Tente novamente!");
                         }
@@ -200,8 +227,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
             });
         });
-        
-        
+
+
 
         // Evento para fechar a div de log
     } catch (error) {
