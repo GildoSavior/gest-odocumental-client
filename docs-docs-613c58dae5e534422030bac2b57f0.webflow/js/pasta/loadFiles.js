@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const shareDiv = document.getElementById("shareDiv");
 
     const token = localStorage.getItem("jwtToken");
-    const folderId = localStorage.getItem("selectedFolderId");
+    const urlParams = new URLSearchParams(window.location.search);
+    const folderId = urlParams.get("id");
 
     if (!token) {
         console.error("Token de autenticação não encontrado!");

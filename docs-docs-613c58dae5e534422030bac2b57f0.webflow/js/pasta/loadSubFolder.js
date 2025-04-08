@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
     //const container = document.querySelector(".section-4 .container .heading-12");
-    const container = document.querySelector(".section-4 .container .sub-folders");
+
+
 
 
     const token = localStorage.getItem("jwtToken");
-    const selectedFolderId = localStorage.getItem("selectedFolderId");
+    //const selectedFolderId = localStorage.getItem("selectedFolderId");
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedFolderId = urlParams.get("id");
 
     const folderName = localStorage.getItem("selectedFolderName") || "Pasta desconhecida";
     const folderYear = localStorage.getItem("selectedFolderYear") || "Ano desconhecido";
+    const container = document.querySelector(".section-4 .container .sub-folders");
 
     const breadcrumb = document.querySelector(".text-block-113");
     if (breadcrumb) {
