@@ -4,7 +4,17 @@ document.addEventListener("DOMContentLoaded", function () {
   localStorage.removeItem("selectedFolderId");
   localStorage.removeItem("selectedFilePath");
 
+  const closeButton = document.getElementById("close-password-wrapper");  // Verifica se o botão de fechar existe
 
+  // Verifica se o botão de fechar existe antes de adicionar o evento
+  if (closeButton) {
+    closeButton.addEventListener("click", function () {
+      const passwordWrapper = document.querySelector(".password-wrapper");
+      if (passwordWrapper) {
+        passwordWrapper.style.display = "none";  // Torna a div .password-wrapper invisível
+      }
+    });
+  }
 
   const passwordInput = document.getElementById("password");
   if (passwordInput) {
@@ -70,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     } else {
       apiUrl = `http://localhost:8080/api/folders/${folderId}/password/${password}`;
-      
+
       sucessoCallback = () => {
         document.querySelector(".w-form-done").style.display = "block";
         document.querySelector(".w-form-done div").textContent = "Pasta aberta com sucesso!";
@@ -100,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".w-form-fail").style.display = "block";
         document.querySelector(".w-form-fail div").textContent = result.message;
         setTimeout(() => {
-          if (fileId) {          
+          if (fileId) {
             window.location.reload();
             return;
           }
