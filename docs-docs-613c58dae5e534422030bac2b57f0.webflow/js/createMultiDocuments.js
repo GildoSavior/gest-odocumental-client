@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const folderSelect = document.getElementById("folder");
     const subFolderSelect = document.getElementById("subFolder");
     const authToken = localStorage.getItem("jwtToken");
-    
+
 
 
     function populateYears(selectedYear = null) {
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         } catch (error) {
             console.error("Erro ao buscar pastas:", error);
-            alert("Erro ao carregar as pastas. " + error );
+            alert("Erro ao carregar as pastas. " + error);
         }
     }
 
@@ -76,9 +76,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 
-    const form = document.getElementById("wf-form-Criar-Anuncio");        
+    const form = document.getElementById("wf-form-Criar-Anuncio");
     const fileInput = document.getElementById("image");
-    
+
     form.addEventListener("submit", async (event) => {
         event.preventDefault(); // Evita o reload da página
 
@@ -108,12 +108,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             const result = await response.json();
             if (response.ok) {
                 alert("Arquivos enviados com sucesso!");
-                
+
                 fileInput.value = ""; // Limpa o input
 
-                   setTimeout(() => {
-        window.location.href = "../main-dashboard.html";
-    }, 1000);
+                setTimeout(() => {
+                    window.location.href = "../main-dashboard.html";
+                }, 1000);
             } else {
 
                 throw new Error(result.message || "Erro ao enviar arquivos.");
@@ -126,6 +126,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     populateYears();
 
-    
- 
+
+
 })

@@ -72,7 +72,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <div class="text-block-115 _800">f</div>
                         <div class="text-block-116">Log</div>
                     </a>
-                    <a href="#" class="action-link w-inline-block share-btn" data-ix="share-appear" data-file-path="${doc.filePath}" data-file-name="${doc.name}" data-file-date =" ${new Date(doc.createdAt).toLocaleDateString()}">
+                    <a href="#" class="action-link w-inline-block share-btn" data-ix="share-appear"
+                         data-file-path= "${doc.filePath}" 
+                         data-file-name= "${doc.name}" 
+                         data-file-date= " ${new Date(doc.createdAt).toLocaleDateString()}"
+                         data-file-id= "${doc.id}"
+                         >
                         <div class="text-block-115">2</div>
                         <div class="text-block-116">Partilhar</div>
                     </a>
@@ -90,18 +95,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelectorAll(".ver-btn").forEach(btn => {
             btn.addEventListener("click", async (event) => {
                 event.preventDefault();
-                
+
                 const filePath = event.currentTarget.getAttribute("data-file-path");
                 const fileId = event.currentTarget.getAttribute("data-file-id");
 
                 localStorage.setItem("selectedFileId", fileId);
                 localStorage.setItem("selectedFilePath", filePath);
-                
+
                 const password = event.currentTarget.getAttribute("data-file-password") || "";
-                if (!password || password.trim() === "") {                    
+                if (!password || password.trim() === "") {
                     window.open(filePath, "_blank"); // Abre o arquivo diretamente
                     return;
-                }          
+                }
 
                 const passwordWrapper = document.querySelector(".password-wrapper");
                 if (passwordWrapper) {
@@ -160,53 +165,59 @@ document.addEventListener("DOMContentLoaded", async () => {
             btn.addEventListener("click", (event) => {
                 event.preventDefault();
 
-                // Obtenha os dados do arquivo
                 const filePath = event.currentTarget.getAttribute("data-file-path");
+                const fileId = event.currentTarget.getAttribute("data-file-id");
                 const fileName = event.currentTarget.getAttribute("data-file-name");
                 const fileDate = event.currentTarget.getAttribute("data-file-date");
 
-                // Exibe os detalhes do documento na UI
-                const docName = document.querySelector(".doc-name-copy .text-block-114-copy")
+                const docName = document.querySelector(".doc-name-copy .text-block-114-copy");
                 docName.textContent = `${fileName} (${fileDate})`;
 
-                // Exibe a div de compartilhamento
                 shareDiv.style.display = "block";
 
-                // Quando o formulário for enviado
                 const shareForm = document.getElementById("share-document-form");
-                shareForm.addEventListener("submit", async (submitEvent) => {
+
+                const clonedForm = shareForm.cloneNode(true);
+                shareForm.parentNode.replaceChild(clonedForm, shareForm);
+
+                clonedForm.addEventListener("submit", async (submitEvent) => {
                     submitEvent.preventDefault();
 
+                    document.querySelector(".w-form-done").style.display = "none";
+                    document.querySelector(".w-form-fail").style.display = "none";
+
                     const email = document.getElementById("email").value;
-                    const password = document.getElementById("password").value;
+                    const password = document.getElementById("document-password").value;
 
-                    // Aqui, você precisará buscar o arquivo no servidor, dado o `filePath`.
-                    // Supondo que você consiga obter o arquivo no backend e usá-lo como um Blob:
-
+                    // Fazer fetch do arquivo
                     const file = await fetch(filePath)
                         .then(response => {
-                            if (!response.ok) {
-                                throw new Error("Erro ao buscar o arquivo.");
-                            }
-                            return response.blob(); // Converte o conteúdo da resposta para um Blob
+                            if (!response.ok) throw new Error("Erro ao buscar o arquivo.");
+                            return response.blob();
                         })
                         .catch(error => {
                             console.error("Erro ao obter o arquivo:", error);
-                            alert("Erro ao obter o arquivo. Tente novamente.");
+                            const errorDiv = document.querySelector(".w-form-fail");
+                            errorDiv.style.display = "block";
+                            errorDiv.querySelector("div").textContent = "Erro ao obter o arquivo. Tente novamente!";
                             return null;
                         });
 
-                    if (!file) return; // Se não conseguimos o arquivo, aborta
+                    if (!file) return;
 
-                    // Cria o FormData para enviar os dados
+                    const filePathParts = filePath.split('/');
+                    const extractedFileName = filePathParts[filePathParts.length - 1].split('?')[0];  // Ex: "Documento Teste_1744022293789.png"
+
+                    // Criar FormData e incluir o nome correto do arquivo
                     const formData = new FormData();
-                    formData.append("file", file); // Envia o arquivo
-                    formData.append("email", email); // Envia o email
-                    formData.append("password", password); // Envia a senha
+                    const fileWithCorrectName = new File([file], extractedFileName, { type: file.type });
+
+                    formData.append("file", fileWithCorrectName);  // Usando o nome extraído do caminho
+                    formData.append("email", email);
+                    formData.append("password", password);
 
                     try {
-                        // Envia os dados para o controller de envio de email
-                        const response = await fetch("http://localhost:8080/api/mails/sendDocument", {
+                        const response = await fetch(`http://localhost:8080/api/mails/sendDocument/${fileId}`, {
                             method: "POST",
                             body: formData,
                             headers: {
@@ -214,19 +225,32 @@ document.addEventListener("DOMContentLoaded", async () => {
                             },
                         });
 
-                        if (response.ok) {
-                            alert("Documento enviado com sucesso!", response.message);
-                            shareDiv.style.display = "none";
+                        const result = await response.json(); // Lê o JSON com `message`, `ok`, `data`
+
+                        if (response.ok && result.ok) {
+                            const successDiv = document.querySelector(".w-form-done");
+                            successDiv.style.display = "block";
+                            successDiv.querySelector("div").textContent = result.message || "Documento enviado com sucesso!";
+
+                            setTimeout(() => {
+                                shareDiv.style.display = "none";
+                            }, 1000);
                         } else {
-                            alert("Erro ao enviar o documento. Tente novamente!");
+                            const errorDiv = document.querySelector(".w-form-fail");
+                            errorDiv.style.display = "block";
+                            errorDiv.querySelector("div").textContent = result.message || "Erro ao enviar o documento.";
                         }
                     } catch (error) {
                         console.error("Erro ao enviar o documento:", error);
-                        alert("Erro ao enviar o documento. Tente novamente!");
+                        const errorDiv = document.querySelector(".w-form-fail");
+                        errorDiv.style.display = "block";
+                        errorDiv.querySelector("div").textContent = "Erro ao enviar o documento. Tente novamente!";
                     }
                 });
             });
         });
+
+
 
 
 

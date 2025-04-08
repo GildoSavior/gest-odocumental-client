@@ -74,8 +74,8 @@
         <input class="text-field-3 w-input" maxlength="256" name="email" data-name="Email" placeholder="" type="email"
           id="email" required="">
         <label for="email-3">Senha (seaplicável)</label>
-        <input class="text-field-3 w-input" maxlength="256" name="password" data-name="password" placeholder=""
-          type="password" id="password" required="">
+        <input class="text-field-3 w-input" maxlength="256" name="document-password" data-name="document-password" placeholder=""
+          type="password" id="document-password" required="">
         <input type="submit" data-wait="Please wait..." class="submit-button-2 w-button" value="Enviar">
       </form>
       <div class="success-message w-form-done">
@@ -318,7 +318,7 @@
   </div>
   <div class="password-wrapper" data-ix="senha-desaparece">
     <div class="form-block w-form">
-      <form id="password-form" name="password-form" data-name="Password Form" method="get" class="w-clearfix"
+      <form id="password-form" name="password-form" data-name="Password Form" method="get" autocomplete="off" class="w-clearfix"
         data-wf-page-id="67d2d5d866445187d190979a" data-wf-element-id="369c9f38-36ef-bda5-ecb6-c7c693483056">
         <div class="imagem-added w-clearfix">
           <div class="div-block-59 ficheiro"></div>
@@ -327,8 +327,14 @@
         <div class="div-block-60">
           <div class="form-field-label-description">Para abrir este documento, por favor, indique a senha</div>
           <label for="password" class="form-field-label">Senha</label>
-          <input class="form-text-field w-input" maxlength="256" name="password" data-name="Password"
-            placeholder="Digite sua senha..." type="password" id="password">
+          <input class="form-text-field w-input"
+          maxlength="256"
+          name="password" 
+          data-name="password"
+          placeholder="Digite sua senha..."
+          type="password"
+          id="password"
+          autocomplete="new-password" />
         </div>
         <a href="#" class="button blue float-right _100 _900 w-button" data-ix="senha-desaparece">Abrir</a>
       </form>
@@ -390,8 +396,9 @@
   <script src="../js/pasta/loadSubFolder.js" type="text/javascript"></script>
   <script src="../js/pasta/loadFiles.js" type="text/javascript"></script>
   <script src="../js/users/getUserNameAndAvatar.js" type="text/javascript"></script>
-  <script src="../js/validatePassword.js" type="text/javascript"></script>
-  
+  <!-- <script src="../js/validatePassword.js" type="text/javascript"></script> -->
+  <script src="../js/validateFilePassword.js" type="text/javascript"></script>
+
 
 </body>
 </html>
