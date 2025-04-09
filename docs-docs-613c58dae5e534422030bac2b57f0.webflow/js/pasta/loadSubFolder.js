@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    //const container = document.querySelector(".section-4 .container .heading-12");
+    const noContent = document.querySelector(".sem-conteudo");
 
 
 
 
     const token = localStorage.getItem("jwtToken");
-    //const selectedFolderId = localStorage.getItem("selectedFolderId");
+
     const urlParams = new URLSearchParams(window.location.search);
     const selectedFolderId = urlParams.get("id");
 

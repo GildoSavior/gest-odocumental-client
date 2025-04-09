@@ -5,6 +5,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const nameInput = document.getElementById("name");
     const passwordInput = document.getElementById("password");
     const authToken = localStorage.getItem("jwtToken");
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+
+    isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    closeLoading = () => {
+        loading.style.display = "none";
+    }
+
+
 
     if (!yearSelect || !folderSelect || !subFolderSelect || !authToken) return;
 
@@ -154,13 +168,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+        isLoading();
+
         const name = nameInput.value;
         const year = yearSelect.value;
         const password = passwordInput.value;
         const folderId = subFolderSelect.value || folderSelect.value;
 
-        if (!name || !year || !password || !folderId) {
-            alert("Por favor, preencha todos os campos.");
+        if (!name || !year || !folderId) {
+            alert("Por favor, preencha todos os campos necessários.");
             return;
         }
 
@@ -187,9 +203,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) throw new Error("Erro ao enviar dados");
+            if (!response.ok) {
+                closeLoading();
+                erro.style.display = "block";
+                throw new Error("Erro ao salvar o arquivo");
+            }
 
-            alert("Arquivo salvo com sucesso!");
+
 
             const responseData = await response.json();
             const fileName = responseData.data.name;
@@ -215,16 +235,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                     body: formData
                 });
 
-                if (!uploadResponse.ok) throw new Error("Erro ao fazer upload");
+                if (!uploadResponse.ok) {
+                    closeLoading();
+                    erro.style.display = "block";
+                    throw new Error("Erro ao fazer upload");
+                }
 
-                alert("Documento e arquivo enviados com sucesso!");
+                closeLoading();
+                sucesso.style.display = "block";
+                // alert("Documento e arquivo enviados com sucesso!");
+               
             } else {
-                alert("Documento criado, mas nenhum arquivo foi enviado.");
+                //alert("Documento criado, mas nenhum arquivo foi enviado.");
             }
 
             setTimeout(() => {
                 window.location.href = "../main-dashboard.html";
-            }, 1000);
+            }, 100);
 
         } catch (error) {
             console.error("Erro ao enviar:", error);
