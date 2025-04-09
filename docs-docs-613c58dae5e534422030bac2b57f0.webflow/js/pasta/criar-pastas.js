@@ -4,15 +4,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const erro = document.querySelector(".erro");
   const loading = document.querySelector(".loading");
 
-
   isLoading = () => {
-      loading.style.display = "block";
+    loading.style.display = "block";
   }
 
   closeLoading = () => {
-      loading.style.display = "none";
+    loading.style.display = "none";
   }
-  
+
   selectAno.innerHTML = ""; // Limpa opções iniciais
 
   for (let ano = 2000; ano <= 2025; ano++) {
@@ -24,23 +23,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Capturar o clique no botão Criar Pasta
   document.querySelector(".button.blue").addEventListener("click", function (event) {
-    event.preventDefault(); // Evita o comportamento padrão do link
+    event.preventDefault();
 
-    // Capturar os valores do formulário
+    isLoading();
     const nome = document.getElementById("nome-do-an-ncio").value;
     const senha = document.getElementById("link-do-anuncio-2").value;
     const ano = document.getElementById("categoria-3").value;
     const token = localStorage.getItem("jwtToken");
 
 
-    // Criar o objeto JSON para envio
     const data = {
       name: nome,
       year: parseInt(ano),
       password: senha
     };
 
-    // Fazer o POST para a rota
     fetch("http://localhost:8080/api/folders", {
       method: "POST",
       headers: {
@@ -51,15 +48,19 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then(response => response.json())
       .then(result => {
-        console.log("Sucesso:", result);
-        alert("Pasta criada com sucesso!");
+        closeLoading();
+        if (result.ok) {
+          sucesso.style.display = "block";
+        } else {
+          erro.style.display = "block";
+        }
         setTimeout(() => {
           window.location.href = "../main-dashboard.html";
-        }, 1000);
+        }, 100);
       })
       .catch(error => {
-        console.error("Erro:", error);
-        alert("Erro ao criar a pasta!");
+        closeLoading();
+        erro.style.display = "block";
       });
   });
 });

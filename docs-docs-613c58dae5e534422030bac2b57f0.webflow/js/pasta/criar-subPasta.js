@@ -1,4 +1,15 @@
 document.addEventListener("DOMContentLoaded", async function () {
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+    isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    closeLoading = () => {
+        loading.style.display = "none";
+    }
     const authToken = localStorage.getItem("jwtToken");
 
     try {
@@ -37,6 +48,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelector(".button.blue").addEventListener("click", async function (event) {
             event.preventDefault();
 
+            isLoading();
             // Capturar os valores do formulário
             const nome = document.getElementById("nome-do-an-ncio").value;
             const senha = document.getElementById("link-do-anuncio-2").value;
@@ -44,6 +56,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const parentFolderId = selectPastaMae.value;
 
             if (!parentFolderId) {
+                closeLoading();
                 alert("Por favor, selecione uma Pasta Mãe.");
                 return;
             }
@@ -65,15 +78,19 @@ document.addEventListener("DOMContentLoaded", async function () {
                 body: JSON.stringify(data)
             });
 
-            if (!response.ok) throw new Error("Erro ao criar a sub-pasta");
+            if (!response.ok) {
+                closeLoading();
+                erro.style.display = "block";
+                throw new Error("Erro ao criar sub-pasta");
+            }
 
             const result = await response.json();
-            console.log("Sucesso:", result);
-            alert("Sub-Pasta criada com sucesso!");
+            closeLoading();
+            sucesso.style.display = "block";
 
             setTimeout(() => {
                 window.location.href = "../main-dashboard.html";
-            }, 1000);
+            }, 100);
         });
 
     } catch (error) {
