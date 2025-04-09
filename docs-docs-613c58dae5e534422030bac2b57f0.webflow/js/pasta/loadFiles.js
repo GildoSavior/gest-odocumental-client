@@ -4,6 +4,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     const logDiv = document.getElementById("logDiv");
     const shareDiv = document.getElementById("shareDiv");
 
+    const certeza = document.querySelector(".certeza");
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+    isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    closeLoading = () => {
+        loading.style.display = "none";
+    }
+
     const token = localStorage.getItem("jwtToken");
     const urlParams = new URLSearchParams(window.location.search);
     const folderId = urlParams.get("id");
@@ -82,8 +95,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <div class="text-block-115">2</div>
                         <div class="text-block-116">Partilhar</div>
                     </a>
-                    <a href="#" class="action-link w-inline-block">
-                        <div class="text-block-115">8</div>
+                    <a href="#" class="action-link w-inline-block delete-btn"  data-file-id= "${doc.id}">
+                        <div class="text-block-115">8</div> 
                         <div class="text-block-116">Apagar</div>
                     </a>
                 </div>
@@ -251,10 +264,55 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         });
 
+        let fileIdToDelete = null;
 
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.addEventListener("click", (event) => {
+                event.preventDefault();
 
+                fileIdToDelete = event.currentTarget.getAttribute("data-file-id");
+                certeza.style.display = "block";
+            });
+        });
 
+        document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
 
+            certeza.style.display = "none";
+            isLoading();
+
+            if (!fileIdToDelete) return;
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/files/${fileIdToDelete}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    closeLoading();
+                    erro.style.display = "block";
+                    const errorData = await response.json(); // pega a resposta JSON com a mensagem
+                    erro.querySelector(".paragraph-2").textContent = errorData.message || "Ocorreu um erro, por favor tente novamente!";
+                    return;
+                }
+
+                const res = await response.json();
+                closeLoading();
+                sucesso.style.display = "block";
+                window.location.reload();
+            } catch (error) {
+                closeLoading();
+                erro.style.display = "block";
+                console.error("Erro ao apagar o documento:", error);
+                erro.querySelector(".paragraph-2").textContent = error.message || "Ocorreu um erro, por favor tente novamente!";
+            } finally {
+                certeza.style.display = "none";
+                fileIdToDelete = null;
+            }
+        });
         // Evento para fechar a div de log
     } catch (error) {
         console.error("Erro ao buscar os documentos:", error);
