@@ -1,3 +1,5 @@
+import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", function () {
   const selectAno = document.getElementById("categoria-3");
   const sucesso = document.querySelector(".sucesso");
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
       password: senha
     };
 
-    fetch("http://localhost:8080/api/folders", {
+    fetch(`${BASE_URL}/folders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

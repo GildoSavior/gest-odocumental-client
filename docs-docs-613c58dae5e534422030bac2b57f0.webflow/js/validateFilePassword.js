@@ -1,3 +1,6 @@
+import { BASE_URL } from './config.js';
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
   localStorage.removeItem("selectedFileId");
@@ -71,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let sucessoCallback;
 
     if (fileId) {
-      apiUrl = `http://localhost:8080/api/files/${fileId}/password/${password}`;
+      apiUrl = `${BASE_URL}/files/${fileId}/password/${password}`;
 
       sucessoCallback = () => {
         document.querySelector(".w-form-done").style.display = "block";
@@ -79,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.open(filePath, "_blank");
       };
     } else {
-      apiUrl = `http://localhost:8080/api/folders/${folderId}/password/${password}`;
+      apiUrl = `${BASE_URL}/folders/${folderId}/password/${password}`;
 
       sucessoCallback = () => {
         document.querySelector(".w-form-done").style.display = "block";

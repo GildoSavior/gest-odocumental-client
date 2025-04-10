@@ -1,3 +1,5 @@
+import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
     const tableWrapper = document.querySelector(".table-wrapper");
     const emptyContentDiv = document.querySelector(".sem-conteudo");
@@ -29,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/files/folder/${folderId}`, {
+        const response = await fetch(`${BASE_URL}/files/folder/${folderId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -136,7 +138,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const fileId = event.currentTarget.getAttribute("data-file-id");
 
                 try {
-                    const logResponse = await fetch(`http://localhost:8080/api/logs/file/${fileId}`, {
+                    const logResponse = await fetch(`${BASE_URL}/logs/file/${fileId}`, {
                         method: "GET",
                         headers: {
                             "Authorization": `Bearer ${token}`,
@@ -231,7 +233,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     formData.append("password", password);
 
                     try {
-                        const response = await fetch(`http://localhost:8080/api/mails/sendDocument/${fileId}`, {
+                        const response = await fetch(`${BASE_URL}/mails/sendDocument/${fileId}`, {
                             method: "POST",
                             body: formData,
                             headers: {
@@ -283,7 +285,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!fileIdToDelete) return;
 
             try {
-                const response = await fetch(`http://localhost:8080/api/files/${fileIdToDelete}`, {
+                const response = await fetch(`${BASE_URL}/files/${fileIdToDelete}`, {
                     method: "DELETE",
                     headers: {
                         "Authorization": `Bearer ${token}`,

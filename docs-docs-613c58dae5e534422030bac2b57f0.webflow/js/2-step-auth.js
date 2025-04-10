@@ -1,8 +1,19 @@
-import { BASE_URL } from './config.js';
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
     const storedEmail = localStorage.getItem("userEmail");
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+    const isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    const closeLoading = () => {
+        loading.style.display = "none";
+    }
 
     if (!storedEmail) {
         alert("Erro: Nenhum email encontrado. Faça login novamente.");
@@ -13,10 +24,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".entrar").addEventListener("click", function (event) {
         event.preventDefault();
 
+        isLoading();
+
         const code = document.getElementById("code").value;
 
         if (!code) {
-            alert("Por favor, insira o código de confirmação.");
+            closeLoading();
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = "Por favor, insira o código de confirmação";
             return;
         }
 
@@ -41,19 +56,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     localStorage.setItem("userPermissions", JSON.stringify(authData.userPermissions));
                     localStorage.setItem("isFirstLogin", authData.isFirstLogin);
 
-                    alert("Código validado com sucesso! Redirecionando...");
+                    closeLoading();
+                    sucesso.style.display = "block";
+                    sucesso.querySelector(".paragraph-2").textContent = "Código validado com sucesso! Redirecionando...";
 
                     setTimeout(() => {
                         window.location.href = "main-dashboard.html";
-                    }, 2000);
+                    }, 500);
                 } else {
                     alert("Erro ao validar código: " + data.message);
-                    
+
                 }
             })
             .catch(error => {
-                console.error("Erro ao enviar requisição:", error);
-                alert("Falha na conexão com o servidor.");
+                closeLoading();
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = "Erro ao enviar requisição:" + error;
             });
     });
 });

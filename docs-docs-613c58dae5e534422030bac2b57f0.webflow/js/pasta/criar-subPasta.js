@@ -1,3 +1,5 @@
+import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", async function () {
     const sucesso = document.querySelector(".sucesso");
     const erro = document.querySelector(".erro");
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Preencher automaticamente o select "Pasta Mãe" com os dados da API
         const selectPastaMae = document.getElementById("pasta-mae-select");
 
-        const responseFolders = await fetch("http://localhost:8080/api/folders", {
+        const responseFolders = await fetch(`${BASE_URL}/folders`, {
             method: "GET",
             headers: { "Authorization": `Bearer ${authToken}` }
         });
@@ -69,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             };
 
             // Fazer o POST para criar a sub-pasta
-            const response = await fetch("http://localhost:8080/api/folders", {
+            const response = await fetch(`${BASE_URL}/api/folders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

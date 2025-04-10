@@ -1,3 +1,5 @@
+import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", function () {
     const container = document.querySelector(".section-4 .container");
 
@@ -11,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch("http://localhost:8080/api/folders", {
+        fetch(`${BASE_URL}/folders`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`, // Enviando o token no header

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const apiUrl = `http://localhost:8080/api/folders/${folderId}/password/${password}`;
+    const apiUrl = `${BASE_URL}/folders/${folderId}/password/${password}`;
 
     try {
       // Faz requisição GET para a API

@@ -1,3 +1,4 @@
+import { BASE_URL } from '../config.js';
 document.addEventListener("DOMContentLoaded", async function () {
     const apiBaseUrl = "http://localhost:8080/api";
     const urlParams = new URLSearchParams(window.location.search);
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (userId) {
         try {
             // Buscar informações do usuário
-            const userResponse = await fetch(`${apiBaseUrl}/users/id/${userId}`, {
+            const userResponse = await fetch(`${BASE_URL}/users/id/${userId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             preencherDadosUsuario(userResult.data);
 
             // Buscar logs do usuário
-            const logsResponse = await fetch(`${apiBaseUrl}/logs/user/${userId}`, {
+            const logsResponse = await fetch(`${BASE_URL}/logs/user/${userId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,

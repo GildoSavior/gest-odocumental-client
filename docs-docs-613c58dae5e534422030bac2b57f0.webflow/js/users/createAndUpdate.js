@@ -1,5 +1,6 @@
+import { BASE_URL } from '../config.js';
 document.addEventListener("DOMContentLoaded", async function () {
-    const apiBaseUrl = "http://localhost:8080/api/users";
+    const apiBaseUrl = `${BASE_URL}/users`;
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("id");
     const token = localStorage.getItem("jwtToken");

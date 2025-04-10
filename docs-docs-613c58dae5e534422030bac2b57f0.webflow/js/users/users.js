@@ -1,10 +1,12 @@
+import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
     const container = document.querySelector(".columns-3.w-row");
 
     const token = localStorage.getItem("jwtToken");// Substitua pelo token real
 
     try {
-      const response = await fetch("http://localhost:8080/api/users", {
+      const response = await fetch(`${BASE_URL}/users`, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"

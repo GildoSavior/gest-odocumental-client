@@ -1,3 +1,5 @@
+import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
     const yearSelect = document.getElementById("year");
     const folderSelect = document.getElementById("folder");
@@ -40,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function fetchFolders(year, selectedFolderId = null, selectedSubFolderId = null) {
         try {
-            const response = await fetch(`http://localhost:8080/api/folders/year/${year}`, {
+            const response = await fetch(`${BASE_URL}/folders/year/${year}`, {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
@@ -67,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function fetchSubFolders(folderId, selectedSubFolderId = null) {
         try {
-            const response = await fetch(`http://localhost:8080/api/folders/${folderId}`, {
+            const response = await fetch(`${BASE_URL}/folders/${folderId}`, {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
@@ -89,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (fileId) {
         try {
-            const response = await fetch(`http://localhost:8080/api/files/${fileId}`, {
+            const response = await fetch(`${BASE_URL}/files/${fileId}`, {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
@@ -188,8 +190,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
 
         const url = fileId
-            ? `http://localhost:8080/api/files/update/${fileId}`
-            : "http://localhost:8080/api/files";
+            ? `${BASE_URL}/files/update/${fileId}`
+            : `${BASE_URL}/files`;
 
         const method = fileId ? "PUT" : "POST";
 
@@ -229,7 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 formData.append("fileName", fileName);
                 formData.append("folderName", folderName);
 
-                const uploadResponse = await fetch("http://localhost:8080/api/files/upload", {
+                const uploadResponse = await fetch(`${BASE_URL}/files/upload`, {
                     method: "POST",
                     headers: { "Authorization": `Bearer ${authToken}` },
                     body: formData

@@ -1,8 +1,8 @@
+import { BASE_URL } from '../config.js';
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const noContent = document.querySelector(".sem-conteudo");
-
-
-
 
     const token = localStorage.getItem("jwtToken");
 
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Exibir um indicador de carregamento
         container.innerHTML = "<p>Carregando pastas...</p>";
 
-        fetch(`http://localhost:8080/api/folders/${selectedFolderId}`, {
+        fetch(`${BASE_URL}/folders/${selectedFolderId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,

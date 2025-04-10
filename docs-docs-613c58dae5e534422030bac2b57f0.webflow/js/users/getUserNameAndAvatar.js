@@ -1,3 +1,6 @@
+
+import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
     const profileName = document.querySelector(".text-block-94"); 
     const profileImage = document.querySelector(".profile-2"); 
@@ -11,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/users/email/${userEmail}`, {
+        const response = await fetch(`${BASE_URL}/users/email/${userEmail}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
