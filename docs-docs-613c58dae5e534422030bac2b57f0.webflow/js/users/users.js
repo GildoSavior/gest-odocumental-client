@@ -1,33 +1,34 @@
-import { BASE_URL } from '../config.js';
-
 document.addEventListener("DOMContentLoaded", async () => {
-    const container = document.querySelector(".columns-3.w-row");
 
-    const token = localStorage.getItem("jwtToken");// Substitua pelo token real
+  const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+  const container = document.querySelector(".columns-3.w-row");
 
-    try {
-      const response = await fetch(`${BASE_URL}/users`, {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      });
 
-      const result = await response.json();
+  const token = localStorage.getItem("jwtToken");// Substitua pelo token real
 
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || "Erro ao carregar os dados.");
+  try {
+    const response = await fetch(`${BASE_URL}/users`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
       }
+    });
 
-      const users = result.data.content;
+    const result = await response.json();
 
-      container.innerHTML = ""; // limpa os cards existentes
+    if (!response.ok || !result.ok) {
+      throw new Error(result.message || "Erro ao carregar os dados.");
+    }
 
-      users.forEach(user => {
-        const column = document.createElement("div");
-        column.className = "new-column w-col w-col-3";
+    const users = result.data.content;
 
-        column.innerHTML = `
+    container.innerHTML = ""; // limpa os cards existentes
+
+    users.forEach(user => {
+      const column = document.createElement("div");
+      column.className = "new-column w-col w-col-3";
+
+      column.innerHTML = `
           <a href="../user/user-log.html?id=${user.id}" class="c-funcionario w-inline-block">
             <div class="c-funcionario-foto" style="background-image: url('${user.imageUrl}'); background-size: cover; background-position: center;"></div>
             <div>
@@ -37,11 +38,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           </a>
         `;
 
-        container.appendChild(column);
-      });
+      container.appendChild(column);
+    });
 
-    } catch (error) {
-      console.error("Erro:", error);
-      alert("Não foi possível carregar os usuários.");
-    }
-  });
+  } catch (error) {
+    console.error("Erro:", error);
+    alert("Não foi possível carregar os usuários.");
+  }
+});

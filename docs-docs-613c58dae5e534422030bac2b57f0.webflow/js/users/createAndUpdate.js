@@ -1,5 +1,7 @@
-import { BASE_URL } from '../config.js';
 document.addEventListener("DOMContentLoaded", async function () {
+
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+
     const apiBaseUrl = `${BASE_URL}/users`;
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("id");

@@ -1,6 +1,7 @@
-import { BASE_URL } from '../config.js';
-
 document.addEventListener("DOMContentLoaded", function () {
+
+  const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+
   const selectAno = document.getElementById("categoria-3");
   const sucesso = document.querySelector(".sucesso");
   const erro = document.querySelector(".erro");

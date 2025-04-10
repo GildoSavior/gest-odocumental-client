@@ -1,7 +1,7 @@
-import { BASE_URL } from '../config.js';
-
-
 document.addEventListener("DOMContentLoaded", function () {
+
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+
     const noContent = document.querySelector(".sem-conteudo");
 
     const token = localStorage.getItem("jwtToken");
@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const container = document.querySelector(".section-4 .container .sub-folders");
 
     const breadcrumb = document.querySelector(".text-block-113");
+
     if (breadcrumb) {
         breadcrumb.textContent = `Início > ${folderYear} > ${folderName}`;
     }

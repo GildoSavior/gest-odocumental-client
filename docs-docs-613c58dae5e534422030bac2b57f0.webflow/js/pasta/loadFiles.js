@@ -1,6 +1,7 @@
-import { BASE_URL } from '../config.js';
-
 document.addEventListener("DOMContentLoaded", async () => {
+
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+
     const tableWrapper = document.querySelector(".table-wrapper");
     const emptyContentDiv = document.querySelector(".sem-conteudo");
     const logDiv = document.getElementById("logDiv");

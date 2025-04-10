@@ -1,7 +1,6 @@
-import { BASE_URL } from './config.js';
-
-
 document.addEventListener("DOMContentLoaded", function () {
+
+  const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
 
   localStorage.removeItem("selectedFileId");
   localStorage.removeItem("selectedFolderId");

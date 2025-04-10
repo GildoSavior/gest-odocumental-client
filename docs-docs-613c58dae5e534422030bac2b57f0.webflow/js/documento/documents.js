@@ -1,6 +1,7 @@
-import { BASE_URL } from '../config.js';
-
 document.addEventListener("DOMContentLoaded", async () => {
+
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+    
     const yearSelect = document.getElementById("year");
     const folderSelect = document.getElementById("folder");
     const subFolderSelect = document.getElementById("subFolder");

@@ -1,7 +1,8 @@
 
-import { BASE_URL } from '../config.js';
-
 document.addEventListener("DOMContentLoaded", async () => {
+
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+    
     const profileName = document.querySelector(".text-block-94"); 
     const profileImage = document.querySelector(".profile-2"); 
 

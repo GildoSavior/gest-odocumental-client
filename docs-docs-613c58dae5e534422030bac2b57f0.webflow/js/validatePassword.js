@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-
+  const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
 
   const passwordWrapper = document.querySelector(".password-wrapper");
 

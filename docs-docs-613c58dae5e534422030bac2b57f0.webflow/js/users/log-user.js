@@ -1,6 +1,8 @@
-import { BASE_URL } from '../config.js';
+
 document.addEventListener("DOMContentLoaded", async function () {
-    const apiBaseUrl = "http://localhost:8080/api";
+    
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
+    
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("id");
     const token = localStorage.getItem("jwtToken"); // Recupera o token salvo no localStorage
