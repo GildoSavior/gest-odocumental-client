@@ -12,11 +12,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const erro = document.querySelector(".erro");
     const loading = document.querySelector(".loading");
 
-    isLoading = () => {
+    const isLoading = () => {
         loading.style.display = "block";
     }
 
-    closeLoading = () => {
+    const closeLoading = () => {
         loading.style.display = "none";
     }
 
@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (!response.ok) {
+            
             throw new Error(`Erro ${response.status}: Falha ao carregar os documentos.`);
         }
 

@@ -2,6 +2,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
 
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+    const isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    const closeLoading = () => {
+        loading.style.display = "none";
+    }
     const noContent = document.querySelector(".sem-conteudo");
 
     const token = localStorage.getItem("jwtToken");
@@ -20,6 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function fetchFolders() {
+
+        isLoading();
         if (!token) {
             console.error("Token de autenticação não encontrado!");
             return;
@@ -38,20 +51,29 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Erro ${response.status}: Falha ao carregar as subpastas.`);
+                    closeLoading();
+                    erro.style.display = "block";
+                    erro.querySelector(".paragraph-2").textContent = "Erro " + response.status + ": Falha ao carregar as subpastas.";
                 }
+                closeLoading();
                 return response.json();
             })
             .then(data => {
                 if (data.ok && data.data) {
+                    closeLoading();
                     renderFolders(data.data.content);
                 } else {
-                    console.error("Erro ao carregar as pastas:", data.message);
+                    closeLoading();
+                    erro.style.display = "block";
+                    erro.querySelector(".paragraph-2").textContent = "Erro: Falha ao carregar as pastas." + data.message;
+
                 }
             })
             .catch(error => {
                 console.error("Erro na requisição:", error);
-                container.innerHTML = "<p>Erro ao carregar pastas.</p>";
+                closeLoading();
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = "Erro na requisição:" + error.message;
             });
     }
 

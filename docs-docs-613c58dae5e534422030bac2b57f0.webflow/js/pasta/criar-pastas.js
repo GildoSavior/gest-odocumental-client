@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const erro = document.querySelector(".erro");
   const loading = document.querySelector(".loading");
 
-  isLoading = () => {
+  const isLoading = () => {
     loading.style.display = "block";
   }
 
-  closeLoading = () => {
+  const closeLoading = () => {
     loading.style.display = "none";
   }
 
@@ -54,12 +54,13 @@ document.addEventListener("DOMContentLoaded", function () {
         closeLoading();
         if (result.ok) {
           sucesso.style.display = "block";
+          setTimeout(() => {
+            window.location.href = "../main-dashboard.html";
+          }, 500);
         } else {
           erro.style.display = "block";
+          erro.querySelector(".paragraph-2").textContent = result.message || "Erro ao criar pasta";
         }
-        setTimeout(() => {
-          window.location.href = "../main-dashboard.html";
-        }, 100);
       })
       .catch(error => {
         closeLoading();

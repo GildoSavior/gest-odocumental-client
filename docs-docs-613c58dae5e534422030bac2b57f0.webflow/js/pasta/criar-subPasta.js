@@ -8,11 +8,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     const erro = document.querySelector(".erro");
     const loading = document.querySelector(".loading");
 
-    isLoading = () => {
+    const isLoading = () => {
         loading.style.display = "block";
     }
 
-    closeLoading = () => {
+    const closeLoading = () => {
         loading.style.display = "none";
     }
     const authToken = localStorage.getItem("jwtToken");
@@ -62,7 +62,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (!parentFolderId) {
                 closeLoading();
-                alert("Por favor, selecione uma Pasta Mãe.");
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = "Por favor, selecione uma Pasta Mãe";                
                 return;
             }
 
@@ -85,21 +86,23 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (!response.ok) {
                 closeLoading();
-                erro.style.display = "block";
-                throw new Error("Erro ao criar sub-pasta");
+                erro.style.display = "block";                
+                erro.querySelector(".paragraph-2").textContent = "Erro ao criar sub-pasta";
+                return;                
             }
 
             const result = await response.json();
             closeLoading();
             sucesso.style.display = "block";
-
             setTimeout(() => {
                 window.location.href = "../main-dashboard.html";
-            }, 100);
+            }, 500);
         });
 
     } catch (error) {
-        console.error("Erro:", error);
+        closeLoading();
+        erro.style.display = "block";                
+        erro.querySelector(".paragraph-2").textContent = error.message;
         alert(error.message);
     }
 });

@@ -2,6 +2,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
 
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+    const isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    const closeLoading = () => {
+        loading.style.display = "none";
+    }
+
+
     const container = document.querySelector(".section-4 .container");
 
     // Recuperar o token do localStorage
@@ -9,8 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Função para buscar as pastas da API
     function fetchFolders() {
+
+        isLoading()
+
         if (!token) {
-            console.error("Token de autenticação não encontrado!");
+            closeLoading();
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = "Token de autenticação não encontrado!";
             return;
         }
 
@@ -24,19 +42,26 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Erro ${response.status}: Falha ao carregar as pastas.`);
+                    closeLoading();
+                    erro.style.display = "block";
+                    erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao carregar as pastas.`;
                 }
                 return response.json();
             })
             .then(data => {
                 if (data.ok && data.data) {
                     renderFolders(JSON.parse(JSON.stringify(data.data.content)));
+                    closeLoading();
                 } else {
-                    console.error("Erro ao carregar as pastas:", data.message);
+                    closeLoading();
+                    erro.style.display = "block";
+                    erro.querySelector(".paragraph-2").textContent = `Erro ${data.message}: Falha ao carregar as pastas.`;
                 }
             })
             .catch(error => {
-                console.error("Erro na requisição:", error);
+                closeLoading();
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = `Falha ao conectar com o servidor: ${error.message}`;                
             });
     }
 
