@@ -1,3 +1,6 @@
+import { BASE_URL } from './config.js';
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const storedEmail = localStorage.getItem("userEmail");
 
@@ -21,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         requestData.append("email", storedEmail);
         requestData.append("code", code);
 
-        fetch("http://localhost:8080/api/auth/email/validateConfirmationCode", {
+        fetch(`${BASE_URL}/auth/email/validateConfirmationCode`, {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: requestData

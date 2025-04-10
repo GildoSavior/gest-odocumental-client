@@ -1,3 +1,5 @@
+import { BASE_URL } from './config.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
     const yearSelect = document.getElementById("year");
     const folderSelect = document.getElementById("folder");
@@ -18,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function fetchFolders(year, selectedFolderId = null, selectedSubFolderId = null) {
         try {
-            const response = await fetch(`http://localhost:8080/api/folders/year/${year}`, {
+            const response = await fetch(`${BASE_URL}/folders/year/${year}`, {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
@@ -45,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function fetchSubFolders(folderId, selectedSubFolderId = null) {
         try {
-            const response = await fetch(`http://localhost:8080/api/folders/${folderId}`, {
+            const response = await fetch(`${BASE_URL}/folders/${folderId}`, {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
@@ -97,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/files/${folderId}/${year}`, {
+            const response = await fetch(`${BASE_URL}/files/${folderId}/${year}`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${authToken}`,

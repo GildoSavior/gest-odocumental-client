@@ -1,3 +1,5 @@
+import { BASE_URL } from './config.js';
+
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".entrar").addEventListener("click", function (event) {
         event.preventDefault(); // Impede o redirecionamento padrão do link
@@ -18,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Enviar requisição para o backend
-        fetch("http://localhost:8080/api/auth/validateCredentials", {
+        fetch(`${BASE_URL}/auth/validateCredentials`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
