@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         if (!response.ok) {
-            
+
             throw new Error(`Erro ${response.status}: Falha ao carregar os documentos.`);
         }
 
@@ -183,6 +183,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             btn.addEventListener("click", (event) => {
                 event.preventDefault();
 
+
                 const filePath = event.currentTarget.getAttribute("data-file-path");
                 const fileId = event.currentTarget.getAttribute("data-file-id");
                 const fileName = event.currentTarget.getAttribute("data-file-name");
@@ -200,6 +201,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 clonedForm.addEventListener("submit", async (submitEvent) => {
                     submitEvent.preventDefault();
+                    isLoading();
 
                     document.querySelector(".w-form-done").style.display = "none";
                     document.querySelector(".w-form-fail").style.display = "none";
@@ -210,14 +212,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                     // Fazer fetch do arquivo
                     const file = await fetch(filePath)
                         .then(response => {
-                            if (!response.ok) throw new Error("Erro ao buscar o arquivo.");
+                            if (!response.ok) {
+                                isLoading();
+                                erro.style.display = "block";
+                                erro.querySelector(".paragraph-2").textContent = "Erro ao obter o arquivo. Tente novamente!";
+                                return null;
+                            }
+
                             return response.blob();
                         })
                         .catch(error => {
+
+                            isLoading();
+                            erro.style.display = "block";
+                            erro.querySelector(".paragraph-2").textContent = "Erro ao obter o arquivo: " + error;
                             console.error("Erro ao obter o arquivo:", error);
-                            const errorDiv = document.querySelector(".w-form-fail");
-                            errorDiv.style.display = "block";
-                            errorDiv.querySelector("div").textContent = "Erro ao obter o arquivo. Tente novamente!";
                             return null;
                         });
 
@@ -246,23 +255,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                         const result = await response.json(); // Lê o JSON com `message`, `ok`, `data`
 
                         if (response.ok && result.ok) {
-                            const successDiv = document.querySelector(".w-form-done");
-                            successDiv.style.display = "block";
-                            successDiv.querySelector("div").textContent = result.message || "Documento enviado com sucesso!";
+                            isLoading();
 
+
+                            isLoading();
+                            sucesso.style.display = "block";
+                            sucesso.querySelector(".paragraph-2").textContent = result.message || "Documento enviado com sucesso!;
+                            
                             setTimeout(() => {
                                 shareDiv.style.display = "none";
-                            }, 1000);
+                            }, 500);
                         } else {
-                            const errorDiv = document.querySelector(".w-form-fail");
-                            errorDiv.style.display = "block";
-                            errorDiv.querySelector("div").textContent = result.message || "Erro ao enviar o documento.";
+                            isLoading();
+                            erro.style.display = "block";
+                            erro.querySelector(".paragraph-2").textContent = result.message || "Erro ao enviar o documento";                            
                         }
                     } catch (error) {
-                        console.error("Erro ao enviar o documento:", error);
-                        const errorDiv = document.querySelector(".w-form-fail");
-                        errorDiv.style.display = "block";
-                        errorDiv.querySelector("div").textContent = "Erro ao enviar o documento. Tente novamente!";
+                        isLoading();
+                        erro.style.display = "block";
+                        erro.querySelector(".paragraph-2").textContent = "Erro ao enviar o documento: " + error.message;    
                     }
                 });
             });
