@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const closeLoading = () => {
         loading.style.display = "none";
     }
+
     const authToken = localStorage.getItem("jwtToken");
 
     try {
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             option.textContent = ano;
             selectAno.appendChild(option);
         }
-        
+
         const selectPastaMae = document.getElementById("pasta-mae-select");
 
         const responseFolders = await fetch(`${BASE_URL}/folders`, {
@@ -40,15 +41,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         const res = await responseFolders.json();
         const folders = res.data.content;
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const parentFolderId = urlParams.get("parentFolderId");
+
         selectPastaMae.innerHTML = `<option value="">Selecione uma pasta</option>`;
         folders.forEach(folder => {
             const option = document.createElement("option");
             option.value = folder.id;
             option.textContent = folder.name;
+
+            if (folder.id.toString() === parentFolderId) {
+                option.selected = true;
+            }
+
             selectPastaMae.appendChild(option);
         });
 
-        // Capturar o clique no botão Criar Sub-Pasta
         document.querySelector(".button.blue").addEventListener("click", async function (event) {
             event.preventDefault();
 
@@ -62,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!parentFolderId) {
                 closeLoading();
                 erro.style.display = "block";
-                erro.querySelector(".paragraph-2").textContent = "Por favor, selecione uma Pasta Mãe";                
+                erro.querySelector(".paragraph-2").textContent = "Por favor, selecione uma Pasta Mãe";
                 return;
             }
 
@@ -85,14 +93,25 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (!response.ok) {
                 closeLoading();
-                erro.style.display = "block";                
+                erro.style.display = "block";
                 erro.querySelector(".paragraph-2").textContent = "Erro ao criar sub-pasta";
-                return;                
+                return;
             }
 
             const result = await response.json();
+
+            const urlParentFolderId = new URLSearchParams(window.location.search).get("parentFolderId");
+
             closeLoading();
             sucesso.style.display = "block";
+
+            if (urlParentFolderId) {
+                setTimeout(() => {
+                    window.location.href = "javascript:history.back()";
+                }, 500);
+                return;
+            }
+
             setTimeout(() => {
                 window.location.href = "../main-dashboard.html";
             }, 500);
@@ -100,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     } catch (error) {
         closeLoading();
-        erro.style.display = "block";                
+        erro.style.display = "block";
         erro.querySelector(".paragraph-2").textContent = error.message;
         alert(error.message);
     }
