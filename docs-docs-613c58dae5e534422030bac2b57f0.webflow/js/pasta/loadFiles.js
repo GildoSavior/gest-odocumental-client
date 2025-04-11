@@ -255,12 +255,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         const result = await response.json(); // Lê o JSON com `message`, `ok`, `data`
 
                         if (response.ok && result.ok) {
-                            isLoading();
-
-
+                            
                             isLoading();
                             sucesso.style.display = "block";
-                            sucesso.querySelector(".paragraph-2").textContent = result.message || "Documento enviado com sucesso!;
+                            sucesso.querySelector(".paragraph-2").textContent = result.message || "Documento enviado com sucesso!";
                             
                             setTimeout(() => {
                                 shareDiv.style.display = "none";

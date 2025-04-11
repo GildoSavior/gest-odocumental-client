@@ -7,6 +7,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     const userId = urlParams.get("id");
     const token = localStorage.getItem("jwtToken");
 
+
+    const certeza = document.querySelector(".certeza");
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+    const isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    const closeLoading = () => {
+        loading.style.display = "none";
+    }
+
     // Referências aos modais
     const modalSucesso = document.querySelector(".modal-sucesso");
     const modalErro = document.querySelector(".modal-erro");
@@ -43,6 +57,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     document.querySelector(".button-2.blue").addEventListener("click", async function (event) {
         event.preventDefault();
+        isLoading();
+
+
 
         const user = {
             id: null,
@@ -91,9 +108,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             const result = await response.json(); // Pegando o JSON da resposta
 
             if (response.ok && result.ok) {
-                // Exibir modal de sucesso
-
-                // Upload da imagem, se existir
                 const fileInput = document.getElementById("image");
                 if (fileInput.files.length > 0) {
                     const formData = new FormData();
@@ -105,8 +119,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                         body: formData
                     });
 
-                    if (!uploadResponse.ok) throw new Error("Erro no upload da imagem");
-                    console.log("Imagem enviada com sucesso");
+                    if (!uploadResponse.ok) {
+                        closeLoading();
+                        erro.style.display = "block";
+                        erro.querySelector(".paragraph-2").textContent = "Erro ao criar utilizador: Não foi possível enviar a imagem.";
+                        return;
+                    }
+
+                    closeLoading();
+                    sucesso.style.display = "block";
+                    sucesso.querySelector(".paragraph-2").textContent = "Utilizador criado com sucesso!";
 
                     setTimeout(() => {
                         window.location.href = "../main-dashboard.html";
@@ -116,14 +138,15 @@ document.addEventListener("DOMContentLoaded", async function () {
                 // Ocultar modal após 3 segundos
                 setTimeout(() => modalSucesso.style.display = "none", 3000);
             } else {
-                alert("Erro ao salvar usuário:" + result.message);
-                modalErro.style.display = "block"; // Exibir modal de erro
-                setTimeout(() => modalErro.style.display = "none", 3000);
+                closeLoading();
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = "Erro ao salvar usuário:" + result.message;
+                return;
             }
         } catch (error) {
-            alert("Erro:" + error);
-            modalErro.style.display = "block";
-            setTimeout(() => modalErro.style.display = "none", 3000);
+            closeLoading();
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = "Erro ao salvar usuário:" + result.message;
         }
     });
 });
