@@ -27,8 +27,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             option.textContent = ano;
             selectAno.appendChild(option);
         }
-
-        // Preencher automaticamente o select "Pasta Mãe" com os dados da API
+        
         const selectPastaMae = document.getElementById("pasta-mae-select");
 
         const responseFolders = await fetch(`${BASE_URL}/folders`, {
@@ -75,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             };
 
             // Fazer o POST para criar a sub-pasta
-            const response = await fetch(`${BASE_URL}/api/folders`, {
+            const response = await fetch(`${BASE_URL}/folders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
