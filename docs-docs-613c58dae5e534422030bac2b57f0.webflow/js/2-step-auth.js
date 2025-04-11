@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }, 500);
                 } else {
                     closeLoading();
-                    erro.style.display = "block";
-                    erro.querySelector(".paragraph-2").textContent = "Erro ao validar código: " + data.message;                    
+                    erro.style.display = "block";        
+                    erro.querySelector(".paragraph-2").textContent = "Erro ao validar código: " + data.message;                
                 }
             })
             .catch(error => {
