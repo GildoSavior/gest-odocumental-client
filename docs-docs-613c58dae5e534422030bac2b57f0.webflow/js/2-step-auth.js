@@ -64,8 +64,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         window.location.href = "main-dashboard.html";
                     }, 500);
                 } else {
-                    alert("Erro ao validar código: " + data.message);
-
+                    closeLoading();
+                    erro.style.display = "block";
+                    erro.querySelector(".paragraph-2").textContent = "Erro ao validar código: " + data.message;                    
                 }
             })
             .catch(error => {
