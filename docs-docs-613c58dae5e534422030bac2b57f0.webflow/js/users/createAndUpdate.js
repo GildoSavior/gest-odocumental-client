@@ -50,8 +50,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     if (input) input.checked = value;
                 });
             }
-        } catch (error) {
-            console.error("Erro ao carregar usuário:", error);
+            
+            closeLoading();
+        } catch (error) {          
+            closeLoading();  
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = "Erro ao carregar usuário: " + error.message;
         }
     }
 
@@ -108,6 +112,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             const result = await response.json(); // Pegando o JSON da resposta
 
             if (response.ok && result.ok) {
+                closeLoading();
+                sucesso.style.display = "block";
                 const fileInput = document.getElementById("image");
                 if (fileInput.files.length > 0) {
                     const formData = new FormData();
@@ -135,7 +141,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                     }, 1000);
                 }
 
-                // Ocultar modal após 3 segundos
+                closeLoading();
+                // Ocultar modal após 3 segundos                
                 setTimeout(() => modalSucesso.style.display = "none", 3000);
             } else {
                 closeLoading();
