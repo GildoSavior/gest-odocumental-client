@@ -21,9 +21,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         loading.style.display = "none";
     }
 
-    // Referências aos modais
-    const modalSucesso = document.querySelector(".modal-sucesso");
-    const modalErro = document.querySelector(".modal-erro");
 
     if (userId) {
         try {
@@ -134,16 +131,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     closeLoading();
                     sucesso.style.display = "block";
-                    sucesso.querySelector(".paragraph-2").textContent = "Utilizador criado com sucesso!";
-
-                    setTimeout(() => {
-                        window.location.href = "../main-dashboard.html";
-                    }, 1000);
+                    sucesso.querySelector(".paragraph-2").textContent = "Utilizador criado com sucesso!";                   
                 }
-
+                
                 closeLoading();
                 // Ocultar modal após 3 segundos                
-                setTimeout(() => modalSucesso.style.display = "none", 3000);
+                setTimeout(() => sucesso.style.display = "none", 1000);
+                setTimeout(() => {
+                    window.location.href = "../main-dashboard.html";
+                }, 1000);
             } else {
                 closeLoading();
                 erro.style.display = "block";
