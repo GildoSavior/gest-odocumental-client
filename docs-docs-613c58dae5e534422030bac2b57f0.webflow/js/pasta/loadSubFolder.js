@@ -24,11 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const folderYear = localStorage.getItem("selectedFolderYear") || "Ano desconhecido";
     const container = document.querySelector(".section-4 .container .sub-folders");
 
-    const breadcrumb = document.querySelector(".text-block-113");
+    // const breadcrumb = document.querySelector(".text-block-113");
 
-    if (breadcrumb) {
-        breadcrumb.textContent = `Início > ${folderYear} > ${folderName}`;
-    }
+    // if (breadcrumb) {
+    //     breadcrumb.textContent = `Início > ${folderYear} > ${folderName}`;
+    // }
 
     function fetchFolders() {
 
@@ -103,6 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
             folderElement.addEventListener("click", function () {
 
                 localStorage.setItem("selectedFolderYear", folder.year);
+                localStorage.setItem("selectedSubFolderYear", folder.year);
                 localStorage.setItem("selectedFolderPassword", folder.password);
                 localStorage.setItem("selectedFolderId", folder.id);
                 localStorage.setItem("selectedSubFolderName", folder.name);

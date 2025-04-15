@@ -255,23 +255,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                         const result = await response.json(); // Lê o JSON com `message`, `ok`, `data`
 
                         if (response.ok && result.ok) {
-                            
+
                             isLoading();
                             sucesso.style.display = "block";
                             sucesso.querySelector(".paragraph-2").textContent = result.message || "Documento enviado com sucesso!";
-                            
+
                             setTimeout(() => {
                                 shareDiv.style.display = "none";
                             }, 500);
                         } else {
                             isLoading();
                             erro.style.display = "block";
-                            erro.querySelector(".paragraph-2").textContent = result.message || "Erro ao enviar o documento";                            
+                            erro.querySelector(".paragraph-2").textContent = result.message || "Erro ao enviar o documento";
                         }
                     } catch (error) {
                         isLoading();
                         erro.style.display = "block";
-                        erro.querySelector(".paragraph-2").textContent = "Erro ao enviar o documento: " + error.message;    
+                        erro.querySelector(".paragraph-2").textContent = "Erro ao enviar o documento: " + error.message;
                     }
                 });
             });

@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const passwordInput = document.getElementById("password");
   if (passwordInput) {
-    passwordInput.value = "";    
+    passwordInput.value = "";
   }
 
   const passwordWrapper = document.querySelector(".password-wrapper");
@@ -53,13 +53,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const password = passwordInput.value;
     if (!password) {
-      alert("Por favor, digite a senha.");
+      document.querySelector(".w-form-fail").style.display = "block";
+      document.querySelector(".w-form-fail div").textContent = "Por favor, digite a senha";
       return;
     }
 
     const token = localStorage.getItem("jwtToken");
     if (!token) {
-      alert("Erro: Usuário não autenticado.");
+      document.querySelector(".w-form-fail").style.display = "block";
+      document.querySelector(".w-form-fail div").textContent = "Erro: Usuário não autenticado";
       return;
     }
 

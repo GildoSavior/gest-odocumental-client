@@ -304,8 +304,8 @@ button,
 }
 .w-form-done {
   display: none;
-  padding: 20px;
-  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
   background-color: #dddddd;
 }
 .w-form-fail {
