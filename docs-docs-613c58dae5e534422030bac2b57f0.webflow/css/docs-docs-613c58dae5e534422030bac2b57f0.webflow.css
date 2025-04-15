@@ -1919,6 +1919,8 @@ body {
 
 .dropdown-list-4 {
   background-color: #f6eaea;
+  max-height: 160px; /* altura aproximada para 4 itens */
+  overflow-y: auto;
 }
 
 .dropdown-list-4.w--open {
