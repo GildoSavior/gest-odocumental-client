@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 // Função para preencher os dados do usuário no HTML
 function preencherDadosUsuario(user) {
     document.getElementById("name").textContent = user.name || "N/A";
-    document.getElementById("position").textContent = user.position || "N/A";
+    document.getElementById("position").textContent = user.descriptionPosition || "N/A";
     document.getElementById("telefone").textContent = user.phoneNumber || "N/A";
     document.getElementById("email").textContent = user.email || "N/A";
 
