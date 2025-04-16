@@ -47,7 +47,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const res = await response.json();
-        const documents = res.data;
+        let documents = res.data;
+
+        const searchQuery = localStorage.getItem("searchQuery");
+
+        if (searchQuery) {
+            documents = documents.filter(d =>
+                d.name.toLowerCase().includes(searchQuery)
+            );
+        }
 
         if (!documents || documents.length === 0) {
             emptyContentDiv.style.display = "block";

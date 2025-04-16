@@ -77,9 +77,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("w-clearfix");
+      
+        const searchQuery = localStorage.getItem("searchQuery");
+
+        let filteredFolders = folders; 
+
+        if (searchQuery) {
+            filteredFolders = filteredFolders.filter(folder =>
+                folder.name.toLowerCase().includes(searchQuery)
+            );
+        }
 
 
-        folders.forEach((folder, index) => {
+        filteredFolders.forEach((folder, index) => {
             let folderElement = document.createElement("a");
             folderElement.classList.add("pasta-link", "w-inline-block");
 
