@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 document.getElementById("position").value = userData.position;
                 document.getElementById("email").value = userData.email;
                 document.getElementById("telefone").value = userData.phoneNumber;
+                document.getElementById("user-password").value = userData.password;
 
                 // Preenche permissões (radio buttons)
                 const selectedPermissionKey = Object.entries(userData.permissions).find(([key, value]) => value === true)?.[0];
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             position: document.getElementById("position").value,
             role: "USER",
             email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
+            password: document.getElementById("user-password").value,
             phoneNumber: document.getElementById("telefone").value,
             enabled: true,
             isFirstLogin: true,
