@@ -1,7 +1,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const BASE_URL = window.BASE_URL || 'http://localhost:8080/api';
+    const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';  
 
     const certeza = document.querySelector(".certeza");
     const sucesso = document.querySelector(".sucesso");

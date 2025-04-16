@@ -13,22 +13,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeLoading = () => {
         loading.style.display = "none";
     }
-    const noContent = document.querySelector(".sem-conteudo");
 
     const token = localStorage.getItem("jwtToken");
 
     const urlParams = new URLSearchParams(window.location.search);
     const selectedFolderId = urlParams.get("id");
 
-    const folderName = localStorage.getItem("selectedFolderName") || "Pasta desconhecida";
-    const folderYear = localStorage.getItem("selectedFolderYear") || "Ano desconhecido";
     const container = document.querySelector(".section-4 .container .sub-folders");
-
-    // const breadcrumb = document.querySelector(".text-block-113");
-
-    // if (breadcrumb) {
-    //     breadcrumb.textContent = `Início > ${folderYear} > ${folderName}`;
-    // }
 
     function fetchFolders() {
 
@@ -38,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Exibir um indicador de carregamento
         container.innerHTML = "<p>Carregando pastas...</p>";
 
         fetch(`${BASE_URL}/folders/${selectedFolderId}`, {
@@ -78,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function renderFolders(folders) {
-        // Garantir que todas as pastas antigas sejam removidas antes de adicionar novas
         container.innerHTML = "";
 
         const titleElement = document.createElement("h4");
@@ -92,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         folders.forEach((folder, index) => {
             let folderElement = document.createElement("a");
-            // folderElement.href = `inside-sub-folder.html?id=${folder.id}`;
             folderElement.classList.add("pasta-link", "w-inline-block");
 
             folderElement.innerHTML = `
@@ -108,7 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 localStorage.setItem("selectedFolderId", folder.id);
                 localStorage.setItem("selectedSubFolderName", folder.name);
 
-                // Verifica se o usuário está tentando acessar uma subpasta sem senha
                 if (!folder.password || folder.password.trim() === "") {
                     window.location.href = `inside-sub-folder.html?id=${folder.id}`;
                     return;
@@ -118,8 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (passwordWrapper) {
                     passwordWrapper.style.display = "block";  // Torna o passwordWrapper visível
                 }
-
-
             });
 
             rowDiv.appendChild(folderElement);

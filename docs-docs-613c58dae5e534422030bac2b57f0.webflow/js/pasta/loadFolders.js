@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const container = document.querySelector(".section-4 .container");
- 
+
     const token = localStorage.getItem("jwtToken");
 
     function fetchFolders() {
@@ -58,65 +58,75 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => {
                 closeLoading();
                 erro.style.display = "block";
-                erro.querySelector(".paragraph-2").textContent = `Falha ao conectar com o servidor: ${error.message}`;                
+                erro.querySelector(".paragraph-2").textContent = `Falha ao conectar com o servidor: ${error.message}`;
             });
     }
 
     // Função para renderizar as pastas no HTML
     function renderFolders(folders) {
         const selectedYear = localStorage.getItem("selectedFilterYear");
-    
-        // Filtra as pastas se tiver um ano selecionado
-        const filteredFolders = selectedYear
-            ? folders.filter(folder => String(folder.year) === selectedYear)
-            : folders;
-    
-        container.innerHTML = ""; // Limpa o container
-    
+        const searchQuery = localStorage.getItem("searchQuery");
+
+        let filteredFolders = folders;
+
+        if (selectedYear) {
+            filteredFolders = filteredFolders.filter(folder => String(folder.year) === selectedYear);
+        }
+
+        if (searchQuery) {
+            filteredFolders = filteredFolders.filter(folder =>
+                folder.name.toLowerCase().includes(searchQuery)
+            );
+        }
+
+        localStorage.removeItem("searchQuery"); // Limpa após usar
+
+        container.innerHTML = "";
         let rowDiv = document.createElement("div");
         rowDiv.classList.add("w-clearfix");
-    
+
         filteredFolders.forEach((folder, index) => {
             let folderElement = document.createElement("a");
             folderElement.classList.add("pasta-link", "w-inline-block");
-    
+
             folderElement.innerHTML = `
                 <div class="div-block-56"></div>
                 <h4 class="heading">${folder.name}</h4>
             `;
-    
+
             folderElement.addEventListener("click", function (event) {
                 event.preventDefault();
                 localStorage.setItem("selectedFolderId", folder.id);
                 localStorage.setItem("selectedFolderName", folder.name);
                 localStorage.setItem("selectedFolderYear", folder.year);
                 localStorage.setItem("selectedFolderPassword", folder.password);
-    
+
                 if (!folder.password || folder.password.trim() === "") {
                     window.location.href = `pastas/inside-folder.html?id=${folder.id}`;
                     return;
                 }
-    
+
                 const passwordWrapper = document.querySelector(".password-wrapper");
                 if (passwordWrapper) {
                     passwordWrapper.style.display = "block";
                 }
             });
-    
+
             rowDiv.appendChild(folderElement);
-    
+
             if ((index + 1) % 4 === 0) {
                 container.appendChild(rowDiv);
                 rowDiv = document.createElement("div");
                 rowDiv.classList.add("w-clearfix");
             }
         });
-    
+
         if (rowDiv.children.length > 0) {
             container.appendChild(rowDiv);
         }
     }
-    
+
+
 
     // Chamar a função ao carregar a página
     fetchFolders();

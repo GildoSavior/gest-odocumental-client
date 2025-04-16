@@ -6,10 +6,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const dropdownToggleText = document.querySelector(".dropdown-toggle div:nth-child(2)");
     const dropdownList = document.querySelector(".dropdown-list-4");
 
-    if (dropdownList && dropdownToggleText) {
-        dropdownList.innerHTML = ""; // Limpa os links existentes
 
-        // Adiciona opção "Todos"
+
+    const sucesso = document.querySelector(".sucesso");
+    const erro = document.querySelector(".erro");
+    const loading = document.querySelector(".loading");
+
+    const isLoading = () => {
+        loading.style.display = "block";
+    }
+
+    const closeLoading = () => {
+        loading.style.display = "none";
+    }
+
+    if (dropdownList && dropdownToggleText) {
+        dropdownList.innerHTML = "";
+
         const allLink = document.createElement("a");
         allLink.href = "#";
         allLink.className = "droplink-anos w-dropdown-link";
@@ -24,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         dropdownList.appendChild(allLink);
 
-        // Adiciona os anos de 2025 até 2000
         for (let year = 2025; year >= 2000; year--) {
             const link = document.createElement("a");
             link.href = "#";
@@ -41,12 +53,29 @@ document.addEventListener("DOMContentLoaded", function () {
             dropdownList.appendChild(link);
         }
 
-        // Mostrar ano salvo no botão ou "Todos"
         const savedYear = localStorage.getItem("selectedFilterYear");
         dropdownToggleText.textContent = savedYear || "Todos";
     }
 
-    // Atualiza o breadcrumb
+    const searchForm = document.querySelector(".search-3");
+    const searchInput = document.getElementById("search");
+
+    // Preencher o input com o valor salvo
+    const savedQuery = localStorage.getItem("searchQuery");
+    if (savedQuery) {
+        searchInput.value = savedQuery;
+    }
+
+    if (searchForm && searchInput) {
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const searchQuery = searchInput.value.trim().toLowerCase();
+            localStorage.setItem("searchQuery", searchQuery);
+            location.reload(); // Recarrega a página para aplicar o filtro
+        });
+    }
+
     if (!breadcrumb) return;
 
     if (window.location.href.includes("inside-sub-folder")) {
