@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function fetchFolders() {
 
         isLoading();
+        
         if (!token) {
             console.error("Token de autenticação não encontrado!");
             return;

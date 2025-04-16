@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
     const BASE_URL = window.BASE_URL || 'https://gest-odocumental.onrender.com/api';
-    
+
     const yearSelect = document.getElementById("year");
     const folderSelect = document.getElementById("folder");
     const subFolderSelect = document.getElementById("subFolder");
@@ -47,7 +47,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
-            if (!response.ok) throw new Error("Erro ao carregar pastas");
+            if (!response.ok) {
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao carregar as pastas: ${response.data.message}`;
+                return;
+            }
 
             const res = await response.json();
             const folders = res.data;
@@ -63,8 +67,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 await fetchSubFolders(selectedFolderId, selectedSubFolderId);
             }
         } catch (error) {
-            console.error("Erro ao buscar pastas:", error);
-            alert("Erro ao carregar as pastas.");
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = `Falha ao carregar as pastas: ${error.message}`;
         }
     }
 
@@ -74,7 +78,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
-            if (!response.ok) throw new Error("Erro ao carregar subpastas");
+            if (!response.ok) {
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao carregar as sub-pastas: ${response.data.message}`;
+                return;
+            }
 
             const res = await response.json();
             const subFolders = res.data.content;
@@ -85,8 +93,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 subFolderSelect.innerHTML += `<option value="${subFolder.id}" ${subFolder.id == selectedSubFolderId ? "selected" : ""}>${subFolder.name}</option>`;
             });
         } catch (error) {
-            console.error("Erro ao buscar subpastas:", error);
-            alert("Erro ao carregar subpastas.");
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = `Falha ao carregar as sub-pastas: ${error.message}`;
+            return;
         }
     }
 
@@ -96,7 +105,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
-            if (!response.ok) throw new Error("Erro ao buscar o arquivo");
+            if (!response.ok) {
+                erro.style.display = "block";
+                erro.querySelector(".paragraph-2").textContent = `Erro ao buscar o arquivo: ${response.data.message}`;
+                return;
+            }
 
             const res = await response.json();
             const fileData = res.data;
@@ -107,8 +120,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             populateYears(fileData.year);
             await fetchFolders(fileData.year, fileData.folderParentId, fileData.folderId);
         } catch (error) {
-            console.error("Erro ao carregar dados do arquivo:", error);
-            alert("Erro ao carregar dados do arquivo.");
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = `Erro ao carregar o arquivo: ${error.message}`;
+            return;
         }
     } else {
         populateYears();
@@ -209,10 +223,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!response.ok) {
                 closeLoading();
                 erro.style.display = "block";
-                throw new Error("Erro ao salvar o arquivo");
+                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao salvar documento: ${response.data.message}`;
+                return;
             }
-
-
 
             const responseData = await response.json();
             const fileName = responseData.data.name;
@@ -239,15 +252,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
 
                 if (!uploadResponse.ok) {
-                    closeLoading();
                     erro.style.display = "block";
-                    throw new Error("Erro ao fazer upload");
+                    erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao fazer upload do ficheiro: ${uploadResponse.data.message}`;
+                    return;
                 }
 
                 closeLoading();
                 sucesso.style.display = "block";
-                // alert("Documento e arquivo enviados com sucesso!");
-               
+                return;
+
             } else {
                 //alert("Documento criado, mas nenhum arquivo foi enviado.");
             }
@@ -257,8 +270,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             }, 100);
 
         } catch (error) {
-            console.error("Erro ao enviar:", error);
-            alert("Falha ao salvar o arquivo.");
+            erro.style.display = "block";
+            erro.querySelector(".paragraph-2").textContent = `Falha: ${error.message}`;
+            return;
         }
     });
 });

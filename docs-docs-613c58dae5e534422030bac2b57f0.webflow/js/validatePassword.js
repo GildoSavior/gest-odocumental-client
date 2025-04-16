@@ -115,14 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
           document.querySelector(".w-form-fail").style.display = "none";
           passwordInput.value = "";  // Limpa o campo de senha
         }, 2000);
-
-        // setTimeout(() => {
-        //   if (fileId) {
-        //     window.location.reload();
-        //     return;
-        //   }
-        //   window.location.href = isMainFolder ? "main-dashboard.html" : "../main-dashboard.html";
-        // }, 2000);
       }
 
     } catch (error) {

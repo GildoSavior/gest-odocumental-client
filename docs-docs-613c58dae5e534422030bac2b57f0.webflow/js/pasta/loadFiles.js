@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const password = event.currentTarget.getAttribute("data-file-password") || "";
                 if (!password || password.trim() === "") {
-                    window.open(filePath, "_blank"); // Abre o arquivo diretamente
+                    window.open(filePath, "_blank"); 
                     return;
                 }
 

@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             position: document.getElementById("position").value,
             role: "USER",
             email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
             phoneNumber: document.getElementById("telefone").value,
             enabled: true,
             isFirstLogin: true,
