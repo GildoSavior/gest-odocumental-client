@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         } catch (error) {
             erro.style.display = "block";
-            erro.querySelector(".paragraph-2").textContent = `Falha ao carregar as pastas: ${error.message}`;
+            erro.querySelector(".paragraph-2").textContent = `Falha ao carregar as pastas: ${error}`;
         }
     }
 
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         } catch (error) {
             erro.style.display = "block";
-            erro.querySelector(".paragraph-2").textContent = `Falha ao carregar as sub-pastas: ${error.message}`;
+            erro.querySelector(".paragraph-2").textContent = `Falha ao carregar as sub-pastas: ${error}`;
             return;
         }
     }
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             await fetchFolders(fileData.year, fileData.folderParentId, fileData.folderId);
         } catch (error) {
             erro.style.display = "block";
-            erro.querySelector(".paragraph-2").textContent = `Erro ao carregar o arquivo: ${error.message}`;
+            erro.querySelector(".paragraph-2").textContent = `Erro ao carregar o arquivo: ${error}`;
             return;
         }
     } else {
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } catch (error) {
             erro.style.display = "block";
-            erro.querySelector(".paragraph-2").textContent = `Falha: ${error.message}`;
+            erro.querySelector(".paragraph-2").textContent = `Falha: ${error}`;
             return;
         }
     });
