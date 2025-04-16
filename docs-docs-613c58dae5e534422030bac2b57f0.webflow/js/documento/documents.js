@@ -47,13 +47,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
-            if (!response.ok) {
+            const res = await response.json();
+
+            if (!res.ok) {
                 erro.style.display = "block";
-                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao carregar as pastas: ${response.data.message}`;
+                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao carregar as pastas: ${res.message}`;
                 return;
             }
 
-            const res = await response.json();
+            
             const folders = res.data;
 
             folderSelect.innerHTML = `<option value="">Selecione uma pasta</option>`;
@@ -78,13 +80,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
-            if (!response.ok) {
+            const res = await response.json();
+
+            if (!res.ok) {
                 erro.style.display = "block";
-                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao carregar as sub-pastas: ${response.data.message}`;
+                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao carregar as sub-pastas: ${res.message}`;
                 return;
             }
 
-            const res = await response.json();
+          
             const subFolders = res.data.content;
 
             subFolderSelect.innerHTML = `<option value="">Selecione uma subpasta</option>`;
@@ -105,13 +109,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Authorization": `Bearer ${authToken}` }
             });
 
-            if (!response.ok) {
+            const res = await response.json();
+
+            if (!res.ok) {
                 erro.style.display = "block";
-                erro.querySelector(".paragraph-2").textContent = `Erro ao buscar o arquivo: ${response.data.message}`;
+                erro.querySelector(".paragraph-2").textContent = `Erro ao buscar o arquivo: ${res.message}`;
                 return;
             }
 
-            const res = await response.json();
+            
             const fileData = res.data;
 
             nameInput.value = fileData.name;
@@ -220,14 +226,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
+            const responseData = await response.json();
+
+            if (!responseData.ok) {
                 closeLoading();
                 erro.style.display = "block";
-                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao salvar documento: ${response.data.message}`;
+                erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao salvar documento: ${responseData.message}`;
                 return;
             }
 
-            const responseData = await response.json();
+            
             const fileName = responseData.data.name;
             const folderName = subFolderSelect.value
                 ? subFolderSelect.selectedOptions[0].textContent
@@ -251,9 +259,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     body: formData
                 });
 
-                if (!uploadResponse.ok) {
+                const res = await uploadResponse.json();
+
+                if (!res.ok) {
                     erro.style.display = "block";
-                    erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao fazer upload do ficheiro: ${uploadResponse.data.message}`;
+                    erro.querySelector(".paragraph-2").textContent = `Erro ${response.status}: Falha ao fazer upload do ficheiro: ${res.message}`;
                     return;
                 }
 
