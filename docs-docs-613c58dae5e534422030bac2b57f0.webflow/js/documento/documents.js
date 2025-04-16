@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             setTimeout(() => {
                 window.location.href = "../main-dashboard.html";
-            }, 100);
+            }, 1000);
 
         } catch (error) {
             erro.style.display = "block";
